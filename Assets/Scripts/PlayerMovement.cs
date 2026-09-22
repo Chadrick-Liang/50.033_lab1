@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isRewinding = false;
 
     public Transform gameCamera;
+    private CameraController cameraController;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         marioBody = GetComponent<Rigidbody2D>();
         // Record Mario's position at the beginning.
         marioStartPosition = marioBody.position;
+        cameraController = gameCamera.GetComponent<CameraController>();
 
         // order life sprites by name (Life1, Life2, ...) so they disappear in order
         lifeSprites = GameObject.FindGameObjectsWithTag("Life").OrderBy(go => go.name).ToArray();
@@ -204,6 +206,6 @@ public class PlayerMovement : MonoBehaviour
         {
             lifeSprite.SetActive(true);
         }
-        gameCamera.position = new Vector3(0, 0, -10);
+        cameraController.ResetCamera();
     }
 }

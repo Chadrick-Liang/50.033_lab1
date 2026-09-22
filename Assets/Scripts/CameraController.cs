@@ -27,8 +27,14 @@ public class CameraController : MonoBehaviour
     {
         float desiredX = player.position.x + offset;
         // check if desiredX is within startX and endX
-        if (desiredX > startX && desiredX < endX)
+        if (desiredX >= startX && desiredX <= endX)
             this.transform.position = new Vector3(desiredX, this.transform.position.y, this.transform.position.z);
+    }
+
+    // reset camera to start
+    public void ResetCamera()
+    {
+        this.transform.position = new Vector3(startX, this.transform.position.y, this.transform.position.z);
     }
 
 }

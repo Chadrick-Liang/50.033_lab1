@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 293306705}
   - component: {fileID: 293306704}
   m_Layer: 5
-  m_Name: Life2
+  m_Name: Life1
   m_TagString: Life
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3080,7 +3080,7 @@ MonoBehaviour:
   enemies: {fileID: 1666320686}
   jumpOverGoomba: {fileID: 1595828816}
   maxRewinds: 2
-  gameCamera: {fileID: 0}
+  gameCamera: {fileID: 519420032}
 --- !u!50 &1595828812
 Rigidbody2D:
   serializedVersion: 5
@@ -3655,7 +3655,7 @@ GameObject:
   - component: {fileID: 1890191863}
   - component: {fileID: 1890191862}
   m_Layer: 5
-  m_Name: Life1
+  m_Name: Life2
   m_TagString: Life
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
