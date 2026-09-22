@@ -35,6 +35,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform gameCamera;
     private CameraController cameraController;
 
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI finalScoreText;
+
+    private bool isGameOver = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,12 +53,15 @@ public class PlayerMovement : MonoBehaviour
 
         // order life sprites by name (Life1, Life2, ...) so they disappear in order
         lifeSprites = GameObject.FindGameObjectsWithTag("Life").OrderBy(go => go.name).ToArray();
+
+        //hide game over panel at start
+        gameOverPanel.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isRewinding) return; // input disabled while the rewind animation plays
+        if (isRewinding || isGameOver) return; // input disabled while the rewind animation plays or game over screen is up
 
         moveHorizontal = Input.GetAxisRaw("Horizontal");
 
@@ -89,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (isRewinding) return; // position is driven by EnemyMovement's rewind coroutine instead
+        if (isRewinding || isGameOver) return; // position is driven by EnemyMovement's rewind coroutine instead
 
         if (Mathf.Abs(moveHorizontal) > 0)
         {
@@ -119,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isRewinding) return; // ignore collisions while the rewind animation plays
+        if (isRewinding || isGameOver) return; // ignore collisions while the rewind animation plays or game over screen is up
 
         if (other.gameObject.CompareTag("Enemy"))
         {
@@ -129,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
 
 
                 rewindsUsed++;
-                Debug.Log("Rewind no:" + rewindsUsed + "/" + maxRewinds + ")");
+                //Debug.Log("Rewind no:" + rewindsUsed + "/" + maxRewinds + ")");
                 EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
                 {
@@ -138,8 +146,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Debug.Log("Collided with goomba! Out of rewinds.");
-                Time.timeScale = 0.0f;
+                GameOver();
             }
         }
     }
@@ -168,9 +175,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void RestartButtonCallback(int input)
     {
-        Debug.Log("Restart!");
+        //Debug.Log("Restart!");
         // reset everything
         ResetGame();
+        isGameOver = false;
+        gameOverPanel.SetActive(false);
         // resume time
         Time.timeScale = 1.0f;
 
@@ -207,5 +216,19 @@ public class PlayerMovement : MonoBehaviour
             lifeSprite.SetActive(true);
         }
         cameraController.ResetCamera();
+    }
+
+    private void GameOver()
+    {
+        isGameOver = true;
+
+        moveHorizontal = 0;
+        stopRequested = false;
+        jumpRequested = false;
+
+        finalScoreText.text = "Score: " + jumpOverGoomba.score;
+        gameOverPanel.SetActive(true);
+
+        Time.timeScale = 0f;
     }
 }

@@ -46,7 +46,7 @@ public class JumpOverGoomba : MonoBehaviour
                 countScoreState = false;
                 score++;
                 scoreText.text = "Score: " + score.ToString();
-                Debug.Log(score);
+                //Debug.Log(score);
             }
         }
     }
@@ -61,12 +61,12 @@ public class JumpOverGoomba : MonoBehaviour
     {
         if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, maxDistance, layerMask))
         {
-            Debug.Log("on ground");
+            //Debug.Log("on ground");
             return true;
         }
         else
         {
-            Debug.Log("not on ground");
+            //Debug.Log("not on ground");
             return false;
         }
     }

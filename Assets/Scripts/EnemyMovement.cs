@@ -121,7 +121,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("EnemyMovement: overlay is not assigned in the Inspector, skipping rewind overlay.", this);
+            //Debug.LogWarning("EnemyMovement: overlay is not assigned in the Inspector, skipping rewind overlay.", this);
         }
 
         //play per frame rewind
@@ -142,6 +142,6 @@ public class EnemyMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
     }
 }
