@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
@@ -26,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
 
     public JumpOverGoomba jumpOverGoomba;
 
+    public int maxRewinds = 2;
+    private int rewindsUsed = 0;
+    private GameObject[] lifeSprites;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
         // Record Mario's position at the beginning.
         marioStartPosition = marioBody.position;
 
+        // order life sprites by name (Life1, Life2, ...) so they disappear in order
+        lifeSprites = GameObject.FindGameObjectsWithTag("Life").OrderBy(go => go.name).ToArray();
     }
 
     // Update is called once per frame
@@ -101,13 +108,41 @@ public class PlayerMovement : MonoBehaviour
         jumpRequested = false;
     }
 
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Collided with goomba!");
-            Time.timeScale = 0.0f;
+            if (rewindsUsed < maxRewinds) //if there are lives left
+            {
+                // hide the life sprite for the life being used
+                if (rewindsUsed < lifeSprites.Length)
+                {
+                    lifeSprites[rewindsUsed].SetActive(false);
+                }
+
+                rewindsUsed++;
+                Debug.Log("Collided with goomba! Rewinding 3 seconds... (" + rewindsUsed + "/" + maxRewinds + ")");
+                EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+                if (enemyMovement != null)
+                {
+                    enemyMovement.Rewind(this); //call rewind function
+                }
+            }
+            else
+            {
+                Debug.Log("Collided with goomba! Out of rewinds.");
+                Time.timeScale = 0.0f;
+            }
         }
+    }
+
+    // called by EnemyMovement to rewind the player back to a stored position
+    public void RewindTo(Vector2 position)
+    {
+        marioBody.position = position;
+        marioBody.linearVelocity = Vector2.zero;
+        marioBody.angularVelocity = 0;
     }
 
     public void RestartButtonCallback(int input)
@@ -144,5 +179,11 @@ public class PlayerMovement : MonoBehaviour
         //reset score
         jumpOverGoomba.score = 0;
 
+        // reset rewind lives
+        rewindsUsed = 0;
+        foreach (GameObject lifeSprite in lifeSprites)
+        {
+            lifeSprite.SetActive(true);
+        }
     }
 }
