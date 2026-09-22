@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SetOverlay : MonoBehaviour
 {
     public Image overlay;
+    public TextMeshProUGUI rewindText;
 
     void Start()
     {
@@ -19,15 +21,24 @@ public class SetOverlay : MonoBehaviour
         rect.offsetMax = Vector2.zero;
 
         overlay.gameObject.SetActive(false); // hidden until Show() is called
+        rewindText.gameObject.SetActive(false);
     }
 
     public void Show()
     {
-        if (overlay != null) overlay.gameObject.SetActive(true);
+        if (overlay != null)
+        {
+            overlay.gameObject.SetActive(true);
+            rewindText.gameObject.SetActive(true);
+        }
     }
 
     public void Hide()
     {
-        if (overlay != null) overlay.gameObject.SetActive(false);
+        if (overlay != null)
+        {
+            overlay.gameObject.SetActive(false);
+            rewindText.gameObject.SetActive(false);
+        }
     }
 }
