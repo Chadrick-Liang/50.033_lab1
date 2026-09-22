@@ -30,6 +30,9 @@ public class PlayerMovement : MonoBehaviour
     public int maxRewinds = 2;
     private int rewindsUsed = 0;
     private GameObject[] lifeSprites;
+    private bool isRewinding = false;
+
+    public Transform gameCamera;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isRewinding) return; // input disabled while the rewind animation plays
+
         moveHorizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
@@ -82,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (isRewinding) return; // position is driven by EnemyMovement's rewind coroutine instead
 
         if (Mathf.Abs(moveHorizontal) > 0)
         {
@@ -111,18 +117,17 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (isRewinding) return; // ignore collisions while the rewind animation plays
+
         if (other.gameObject.CompareTag("Enemy"))
         {
             if (rewindsUsed < maxRewinds) //if there are lives left
             {
-                // hide the life sprite for the life being used
-                if (rewindsUsed < lifeSprites.Length)
-                {
-                    lifeSprites[rewindsUsed].SetActive(false);
-                }
+                lifeSprites[rewindsUsed].SetActive(false);
+
 
                 rewindsUsed++;
-                Debug.Log("Collided with goomba! Rewinding 3 seconds... (" + rewindsUsed + "/" + maxRewinds + ")");
+                Debug.Log("Rewind no:" + rewindsUsed + "/" + maxRewinds + ")");
                 EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
                 {
@@ -143,6 +148,20 @@ public class PlayerMovement : MonoBehaviour
         marioBody.position = position;
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;
+    }
+
+    // called by EnemyMovement to freeze/unfreeze player control while the rewind animation plays
+    public void SetRewinding(bool rewinding)
+    {
+        isRewinding = rewinding;
+        if (rewinding)
+        {
+            moveHorizontal = 0;
+            stopRequested = false;
+            jumpRequested = false;
+            marioBody.linearVelocity = Vector2.zero;
+            marioBody.angularVelocity = 0;
+        }
     }
 
     public void RestartButtonCallback(int input)
@@ -185,5 +204,6 @@ public class PlayerMovement : MonoBehaviour
         {
             lifeSprite.SetActive(true);
         }
+        gameCamera.position = new Vector3(0, 0, -10);
     }
 }

@@ -25,6 +25,8 @@ public class EnemyMovement : MonoBehaviour
         public Vector2 playerPosition;
     }
     private Queue<PositionSnapshot> history = new Queue<PositionSnapshot>();
+    private bool isRewinding = false;
+    public SetOverlay overlay;
 
     void Start()
     {
@@ -49,6 +51,8 @@ public class EnemyMovement : MonoBehaviour
     // note that this is Update(), which still works but not ideal. See below.
     void FixedUpdate()
     {
+        if (isRewinding) return; // frozen while the rewind coroutine drives our position
+
         if (Mathf.Abs(enemyBody.position.x - originalX) < maxOffset)
         {// move goomba
             Movegoomba();
@@ -72,7 +76,7 @@ public class EnemyMovement : MonoBehaviour
         float distance = Vector2.Distance(enemyBody.position, player.position);
         if (distance <= maxOffset) //if mario's distance < goomba's patrol radius
         {
-            history.Enqueue(new PositionSnapshot //record a snaphot of time, enemy pos, player pos
+            history.Enqueue(new PositionSnapshot //uses a queue mechanic to record player pos, enemy for a set durstion
             {
                 time = Time.time,
                 enemyPosition = enemyBody.position,
@@ -86,16 +90,54 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    // rewind mechanic
+    // rewind mechanic (playback function)
     public void Rewind(PlayerMovement playerMovement)
     {
-        if (history.Count == 0) return;
+        //will not rewind if no past history is recorded and rewind not triggered yet
+        if (history.Count == 0 || isRewinding) return;
 
-        PositionSnapshot snapshot = history.Peek(); //take the oldests entry in the queue (how long to rewind back)
-        enemyBody.position = snapshot.enemyPosition;
-        playerMovement.RewindTo(snapshot.playerPosition);
+        //we use a corountine here (a type of unity object that allows a function to run over multiple frames)
+        //normally, unity renders frames after executing finish scripts
+        StartCoroutine(RewindCoroutine(playerMovement));
+    }
 
+    // rewind mechanic (per frame)
+    private IEnumerator RewindCoroutine(PlayerMovement playerMovement)
+    {
+        //convert our queue to a array for easier indexing access
+        PositionSnapshot[] snapshots = history.ToArray();
+        //clear the queue to prevent edge cases like 2nd rewind containing the 1st rewind timing etc
         history.Clear();
+
+        //set bool to prevent user action during animation
+        isRewinding = true;
+        playerMovement.SetRewinding(true);
+
+        //show overlay when rewinding
+        bool hasOverlay = overlay != null;
+        if (hasOverlay)
+        {
+            overlay.Show();
+        }
+        else
+        {
+            Debug.LogWarning("EnemyMovement: overlay is not assigned in the Inspector, skipping rewind overlay.", this);
+        }
+
+        //play per frame rewind
+        for (int i = snapshots.Length - 1; i >= 0; i--)
+        {
+            enemyBody.position = snapshots[i].enemyPosition;
+            playerMovement.RewindTo(snapshots[i].playerPosition);
+            yield return new WaitForFixedUpdate();
+        }
+
+        isRewinding = false;
+        playerMovement.SetRewinding(false);
+        if (hasOverlay)
+        {
+            overlay.Hide();
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
