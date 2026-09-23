@@ -26,7 +26,7 @@ public class EnemyMovement : MonoBehaviour
     }
     private Queue<PositionSnapshot> history = new Queue<PositionSnapshot>();
     private bool isRewinding = false;
-    public SetOverlay overlay;
+    public GameObject rewindPanel;
 
     void Start()
     {
@@ -38,6 +38,8 @@ public class EnemyMovement : MonoBehaviour
         ComputeVelocity();
 
         player = GameObject.FindGameObjectWithTag("Player").transform; //get mario's game object to detect collision
+
+        rewindPanel.SetActive(false); // only shown while the rewind animation plays
     }
     void ComputeVelocity()
     {
@@ -112,17 +114,7 @@ public class EnemyMovement : MonoBehaviour
         //set bool to prevent user action during animation
         isRewinding = true;
         playerMovement.SetRewinding(true);
-
-        //show overlay when rewinding
-        bool hasOverlay = overlay != null;
-        if (hasOverlay)
-        {
-            overlay.Show();
-        }
-        else
-        {
-            //Debug.LogWarning("EnemyMovement: overlay is not assigned in the Inspector, skipping rewind overlay.", this);
-        }
+        rewindPanel.SetActive(true);
 
         //play per frame rewind
         for (int i = snapshots.Length - 1; i >= 0; i--)
@@ -134,10 +126,7 @@ public class EnemyMovement : MonoBehaviour
 
         isRewinding = false;
         playerMovement.SetRewinding(false);
-        if (hasOverlay)
-        {
-            overlay.Hide();
-        }
+        rewindPanel.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other)

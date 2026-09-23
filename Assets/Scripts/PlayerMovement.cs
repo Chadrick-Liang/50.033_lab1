@@ -34,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform gameCamera;
     private CameraController cameraController;
-
     public GameObject gameOverPanel;
     public TextMeshProUGUI finalScoreText;
 
