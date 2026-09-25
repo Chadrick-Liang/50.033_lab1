@@ -99,6 +99,8 @@ public class PlayerMovement : MonoBehaviour
             //marioAnimator.SetBool("onGround", onGroundState); 
         }
     }
+
+    // FixedUpdate is called 50 times a second
     void FixedUpdate()
     {
         if (isRewinding || isGameOver) return; // position is driven by EnemyMovement's rewind coroutine instead
