@@ -319,24 +319,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b689ef4b521074099b5ef147489d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelRules
-  maxStepUp: 8
-  maxGap: 8
+  maxStepUp: 6
+  maxGap: 6
   minGap: 3
   maxStepDown: 4
-  maxStepUpAcrossGap: 2
+  maxStepUpAcrossGap: 4
   minRunBeforeGap: 3
   safeZoneLength: 5
   maxGapWithPlatform: 16
   platformClearance: 3
   blockClearance: 3
   maxBlockRowLength: 5
-  questionChance: 0.4
+  questionChance: 0.2
   minPipeHeight: 2
   maxPipeHeight: 5
   minPipeSpacing: 2
   goombaPatrol: 5
   minEnemySpacing: 6
-  dangerSpacing: 2
+  dangerSpacing: 5
+  edgeClearance: 2
 --- !u!114 &147690130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,20 +352,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
   rules: {fileID: 147690129}
   levelWidth: 300
-  levelHeight: 50
+  levelHeight: 15
   seed: 0
   startHeight: 1
   maxGroundHeight: 50
   groundTopY: -4.5
   minSegmentLength: 3
-  maxSegmentLength: 6
+  maxSegmentLength: 12
   gapChance: 0.25
   bridgeChance: 0.3
   heightChangeChance: 0.788
-  pipeAttempts: 30
-  enemyAttempts: 30
-  blockRowAttempts: 30
-  platformAttempts: 30
+  pipeAttempts: 100
+  enemyAttempts: 300
+  blockRowAttempts: 300
+  platformAttempts: 100
   groundPrefab: {fileID: 6606764461973984750, guid: 6b6a6ed9291bbde4e9ac4bb24f6603ab, type: 3}
   brickPrefab: {fileID: 7952067846304318071, guid: 151c1d1773474bf439ce342051be6dbb, type: 3}
   questionPrefab: {fileID: 883958245111712940, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
@@ -2732,8 +2733,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.9, y: 0.9}
+  m_EdgeRadius: 0.05
 --- !u!114 &1595828816
 MonoBehaviour:
   m_ObjectHideFlags: 0

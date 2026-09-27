@@ -1,8 +1,6 @@
 using UnityEngine;
 
-// All placement rules live here. LevelGenerator proposes something ("pipe at x = 40?")
-// and these methods answer yes/no. Tweak the numbers in the Inspector to change difficulty.
-// All distances are in tiles (1 tile = 1 Unity unit).
+//rules of placing items, returns bool whether item can be placed at that specific coordinate
 public class LevelRules : MonoBehaviour
 {
     [Header("Mario's abilities - measure these in play mode!")]
@@ -32,27 +30,52 @@ public class LevelRules : MonoBehaviour
 
 
     [Header("Enemies")]
-    public int goombaPatrol = 5;        // must match maxOffset in EnemyMovement.cs
+    public int goombaPatrol = 2;        // must match maxOffset in EnemyMovement.cs
     public int minEnemySpacing = 6;
 
     [Header("General spacing")]
     public int dangerSpacing = 2;       // min tiles between pits  / pipes
+    public int edgeClearance = 2;       // columns after a step up / pit landing with nothing overhead, so Mario's jump isn't blocked
 
 
-    // ---------- safe zones ----------
+    //a landing edge is the first ground column after a step up or after a pit (any height)
+    public bool IsLandingEdge(LevelData level, int x)
+    {
+        if (x <= 0 || x >= level.width) return false;
+        int h = level.groundHeight[x];
+        int before = level.groundHeight[x - 1];
+        return h > 0 && (before == 0 || before < h);
+    }
+
+    //checks if any column fromX..toX is within edgeClearance columns after a landing edge
+    public bool NearLandingEdge(LevelData level, int fromX, int toX)
+    {
+        for (int cx = fromX; cx <= toX; cx++)
+        {
+            // cx is too close if one of the edgeClearance columns ending at cx is a landing edge
+            for (int e = cx - edgeClearance + 1; e <= cx; e++)
+            {
+                if (IsLandingEdge(level, e)) return true;
+            }
+        }
+        return false;
+    }
+
+    //used for random walk to ensure no goomba spawns next to mario and triggers rewind immediately
     public bool InSafeZone(LevelData level, int fromX, int toX)
     {
         return fromX < safeZoneLength || toX >= level.width - safeZoneLength;
     }
 
 
-    // ---------- ground (used by the random walk) ----------
+    //used for random walk on how high up/down can the ground vary from
     public bool IsValidStep(int fromHeight, int toHeight)
     {
         int dy = toHeight - fromHeight;
         return dy <= maxStepUp && -dy <= maxStepDown;
     }
 
+    //used for random gap to ensure pits (with and without platform) is not too far for mario
     public bool IsValidGap(int gapWidth, int fromHeight, int toHeight, bool hasPlatform)
     {
         int widest = hasPlatform ? maxGapWithPlatform : maxGap;
@@ -62,9 +85,7 @@ public class LevelRules : MonoBehaviour
         return true;
     }
 
-
-    // ---------- pipes ----------
-    // pipe occupies columns x and x+1
+    //checks if a pipe can be placed at the coordinate
     public bool CanPlacePipe(LevelData level, int x, int pipeHeight)
     {
         if (InSafeZone(level, x, x + 1)) return false;
@@ -138,6 +159,9 @@ public class LevelRules : MonoBehaviour
         // no pipes underneath (blocks the jump)
         if (level.AnyInColumns(TileType.Pipe, x - 1, x + length)) return false;
 
+        // not right after a step up / pit, Mario would hit it mid-jump and fall short of the ledge
+        if (NearLandingEdge(level, x, x + length - 1)) return false;
+
         return true;
     }
 
@@ -176,6 +200,9 @@ public class LevelRules : MonoBehaviour
 
         // not above pipes, Mario gets wedged between the two
         if (level.AnyInColumns(TileType.Pipe, x - 1, x + length)) return false;
+
+        // not right after a step up / pit, Mario would hit it mid-jump and fall short of the ledge
+        if (NearLandingEdge(level, x, x + length - 1)) return false;
 
         return true;
     }

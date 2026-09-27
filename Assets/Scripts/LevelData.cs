@@ -1,17 +1,16 @@
 using System.Text;
 using UnityEngine;
 
-// what occupies each cell of the level grid
+//the types of available tiles in the grid
 public enum TileType { Empty, Ground, Brick, Question, Pipe, Platform, Enemy }
 
-// plain data holder for the generated level (not a MonoBehaviour, just a grid + helpers)
-// 1 tile = 1 Unity unit, tiles[x, y] with y = 0 being the bottom row
+//set level coordinates and sizes
 public class LevelData
 {
     public int width;
     public int height;
     public TileType[,] tiles;
-    public int[] groundHeight; // how many ground tiles are stacked in each column, 0 = pit
+    public int[] groundHeight; //how many ground tiles are stacked in each column, 0 = pit
 
     public LevelData(int width, int height)
     {
@@ -21,23 +20,26 @@ public class LevelData
         groundHeight = new int[width];
     }
 
+    //checks whether coordinates for spawning object are within level boundaries
     public bool InBounds(int x, int y)
     {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    // out of bounds counts as empty so rules don't need to worry about the edges
+    //getter for tile type given coordinate
     public TileType Get(int x, int y)
     {
         if (!InBounds(x, y)) return TileType.Empty;
         return tiles[x, y];
     }
 
+    //setter for tile type given coordinate
     public void Set(int x, int y, TileType type)
     {
         if (InBounds(x, y)) tiles[x, y] = type;
     }
 
+    //checks if a column is a pit
     public bool IsPit(int x)
     {
         if (x < 0 || x >= width) return false;
@@ -57,7 +59,7 @@ public class LevelData
         return true;
     }
 
-    // true if the type appears anywhere in columns fromX .. toX (at any height)
+    //checks if a tile of a specific type exists in the specified columns
     public bool AnyInColumns(TileType type, int fromX, int toX)
     {
         for (int x = fromX; x <= toX; x++)
@@ -85,6 +87,7 @@ public class LevelData
         return sb.ToString();
     }
 
+    // returns the ASCII symbol for a tile type
     private char Symbol(TileType type)
     {
         switch (type)

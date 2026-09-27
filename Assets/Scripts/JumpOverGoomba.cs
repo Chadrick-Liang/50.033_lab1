@@ -39,7 +39,8 @@ public class JumpOverGoomba : MonoBehaviour
         }
 
         // when jumping, and Goomba is near Mario and we haven't registered our score
-        if (!onGroundState && countScoreState)
+        // enemyLocation can be empty if the generated level has no goombas
+        if (!onGroundState && countScoreState && enemyLocation != null)
         {
             if (Mathf.Abs(transform.position.x - enemyLocation.position.x) < 0.5f)
             {
