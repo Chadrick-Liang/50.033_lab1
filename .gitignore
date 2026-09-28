@@ -92,3 +92,6 @@ crashlytics-build.properties
 # Generated Visual Scripting database
 /Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
 /Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+
+# Generated map
+/GeneratedLevel.txt
