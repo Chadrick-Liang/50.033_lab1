@@ -13,7 +13,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Level size")]
     public int levelWidth = 150;
     public int levelHeight = 16;
-    public int seed = 0;                // 0 = new random level every play, anything else = same level every time
+    public int seed = 0;
     public int startHeight = 1;         // ground height at the start, 1 lines up with the old ground
     public int maxGroundHeight = 5;
     public float groundTopY = -4.5f;    // world y of the top of the starting ground
@@ -22,41 +22,41 @@ public class LevelGenerator : MonoBehaviour
     public int minSegmentLength = 3;
     public int maxSegmentLength = 14;
     [Range(0, 1)] public float gapChance = 0.25f;
-    [Range(0, 1)] public float bridgeChance = 0.3f;        // chance a pit is a wide one with a platform in the middle
+    [Range(0, 1)] public float bridgeChance = 0.3f;
     [Range(0, 1)] public float heightChangeChance = 0.5f;
 
-    [Header("How many times to TRY placing each thing (rules reject a lot)")]
+    [Header("How many times to try placing each object")]
     public int pipeAttempts = 15;
     public int enemyAttempts = 30;
     public int blockRowAttempts = 30;
     public int platformAttempts = 15;
 
     [Header("Prefabs")]
-    public GameObject groundPrefab;     // 1x1, tag Ground, layer Ground
+    public GameObject groundPrefab;
     public GameObject brickPrefab;
     public GameObject questionPrefab;
-    public GameObject pipeTopPrefab;    // pipe_green_top_up (2x2)
-    public GameObject pipeBodyPrefab;   // pipe_green_body (1 tall)
+    public GameObject pipeTopPrefab;
+    public GameObject pipeBodyPrefab;
     public GameObject platformPrefab;
     public GameObject goombaPrefab;
 
     [Header("Scene references")]
-    public Transform player;            // Mario, the level starts just left of him
-    public Transform enemiesParent;     // the "Enemies" object, PlayerMovement resets its children
-    public Transform endLimit;          // moved to the end of the level for CameraController
-    public GameObject rewindPanel;      // spawned goombas need this, EnemyMovement.Start() uses it
-    public JumpOverGoomba jumpOverGoomba; // optional, pointed at the first spawned goomba
+    public Transform player;
+    public Transform enemiesParent;
+    public Transform endLimit;
+    public GameObject rewindPanel;
+    public JumpOverGoomba jumpOverGoomba;
 
     [Header("Debug")]
     public bool printAscii = true;
-    public bool drawWalk = true;        // draw the random walk as gizmos (Scene view, or Game view with Gizmos on)
-    public float walkRevealSpeed = 3f;  // walk steps revealed per second while playing, 0 = show everything at once
+    public bool drawWalk = true;
+    public float walkRevealSpeed = 3f;
 
     private LevelData level;
-    private Vector2 origin;             // world position of the centre of tile (0, 0)
+    private Vector2 origin;
     private List<Vector3Int> pipes = new List<Vector3Int>(); // x = column, y = ground height, z = pipe height
 
-    // every decision the random walk made, recorded so we can draw/log it
+    //log of decisions made
     private enum StepKind { Flat, StepUp, StepDown, Pit, Bridge, Rejected }
     private struct WalkStep
     {
@@ -72,6 +72,7 @@ public class LevelGenerator : MonoBehaviour
     // Awake (not Start) so the level exists before CameraController/EnemyMovement run their Start()
     void Awake()
     {
+        //check if correct asset is being used
         CheckIsPrefabAsset(groundPrefab);
         CheckIsPrefabAsset(brickPrefab);
         CheckIsPrefabAsset(questionPrefab);
@@ -82,12 +83,12 @@ public class LevelGenerator : MonoBehaviour
 
         if (seed == 0) seed = Random.Range(1, 100000);
         Random.InitState(seed);
-        Debug.Log("Level seed: " + seed + " (put this in the seed field to replay this level)");
+        Debug.Log("Level seed: " + seed);
 
         level = new LevelData(levelWidth, levelHeight);
-        // put Mario 3 tiles into the level, and line the start ground's top up with groundTopY
         origin = new Vector2(Mathf.Round(player.position.x) - 3, groundTopY - startHeight + 0.5f);
 
+        //decides items locations by placing them on the level grid
         GenerateGround();
         PlacePipes();
         PlaceEnemies();
@@ -98,16 +99,14 @@ public class LevelGenerator : MonoBehaviour
         {
             string ascii = level.ToAscii();
             Debug.Log(ascii);
-            // the console font isn't monospaced, so also save it where it's easier to read
             System.IO.File.WriteAllText(Application.dataPath + "/../GeneratedLevel.txt", ascii);
         }
-
+        //spawns the relevant game objects by reading the level grid
         SpawnAll();
     }
 
 
-    // prefab slots must be dragged from the Project window, not the Hierarchy.
-    // a scene object gets copied as-is, so if it's disabled every copy spawns disabled too
+    //check if gameobject is prefab
     void CheckIsPrefabAsset(GameObject prefab)
     {
         if (prefab != null && prefab.scene.IsValid())
@@ -116,7 +115,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    // ---------- step 1: random walk for ground and pits ----------
+    //random walk for grounds and pits
     void GenerateGround()
     {
         int x = 0;
@@ -132,6 +131,7 @@ public class LevelGenerator : MonoBehaviour
 
         while (x < stopX)
         {
+            //create a gap or pit
             if (Random.value < gapChance)
             {
                 bool bridged = Random.value < bridgeChance;
@@ -140,11 +140,13 @@ public class LevelGenerator : MonoBehaviour
                     : Random.Range(rules.minGap, rules.maxGap + 1);
                 int landingHeight = PickNextHeight(h);
 
+                //if valid spot to put a pit
                 if (rules.IsValidGap(gapWidth, h, landingHeight, bridged))
                 {
                     int pitStart = x;
                     RecordStep(bridged ? StepKind.Bridge : StepKind.Pit, x, gapWidth, h, landingHeight);
                     x = FillGround(x, gapWidth, 0);
+                    //spawn platform if gap is valid and exceeds maximum length without bridge
                     if (bridged) AddBridge(pitStart, gapWidth, h);
                     h = landingHeight;
                     // landing run, also the run-up for any pit right after
@@ -152,12 +154,11 @@ public class LevelGenerator : MonoBehaviour
                     x = FillGround(x, rules.minRunBeforeGap, h);
                     continue;
                 }
-                // rules said no, fall through and make normal ground instead
+                //rules said no, fall through and make normal ground instead
                 RecordStep(StepKind.Rejected, x, 0, h, landingHeight);
             }
 
-            // change height at the START of a segment, so the column before a pit
-            // always belongs to a full-length run at the current height
+            //check if height of columns after pit should vary
             int oldHeight = h;
             int nextHeight = PickNextHeight(h);
             if (Random.value < heightChangeChance)
@@ -179,6 +180,7 @@ public class LevelGenerator : MonoBehaviour
         generatedTime = Time.time;
     }
 
+    //record height differences for random walk
     void RecordStep(StepKind kind, int x, int length, int fromHeight, int toHeight)
     {
         WalkStep step = new WalkStep();
@@ -240,7 +242,7 @@ public class LevelGenerator : MonoBehaviour
     {
         int sideGap = Mathf.Min(rules.maxGap, (gapWidth - 2) / 2); // at least 2 platform tiles
         int length = gapWidth - sideGap * 2;
-        int y = takeoffHeight; // one step above the takeoff ground
+        int y = takeoffHeight;
         for (int i = 0; i < length; i++)
         {
             level.Set(pitStart + sideGap + i, y, TileType.Platform);
@@ -248,7 +250,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    // ---------- step 2: try placing things, rules decide ----------
+    //randomly place pipes
     void PlacePipes()
     {
         for (int i = 0; i < pipeAttempts; i++)
@@ -269,6 +271,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    //randomly place enemies
     void PlaceEnemies()
     {
         for (int i = 0; i < enemyAttempts; i++)
@@ -279,6 +282,7 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    //randomly place blocks
     void PlaceBlockRows()
     {
         for (int i = 0; i < blockRowAttempts; i++)
@@ -294,7 +298,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-
+    //randomly place platforms
     void PlaceFloatingPlatforms()
     {
         for (int i = 0; i < platformAttempts; i++)
@@ -313,7 +317,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    // ---------- step 3: spawn prefabs ----------
+    //get object reference from game rules
     Vector3 TileToWorld(int x, int y)
     {
         return new Vector3(origin.x + x, origin.y + y, 0);
@@ -329,7 +333,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 Vector3 pos = TileToWorld(x, y);
                 switch (level.Get(x, y))
-                {
+                {   //instantiates all game objects
                     case TileType.Ground: Instantiate(groundPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Brick: Instantiate(brickPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Question: Instantiate(questionPrefab, pos, Quaternion.identity, transform); break;
@@ -337,14 +341,17 @@ public class LevelGenerator : MonoBehaviour
                     case TileType.Enemy:
                         // parented under Enemies so PlayerMovement.ResetGame() resets them
                         GameObject goomba = Instantiate(goombaPrefab, pos, Quaternion.identity, enemiesParent);
-                        goomba.GetComponent<EnemyMovement>().rewindPanel = rewindPanel;
+                        EnemyMovement movement = goomba.GetComponent<EnemyMovement>();
+                        movement.rewindPanel = rewindPanel;
+                        movement.maxOffset = rules.maxOffset;
                         if (firstGoomba == null) firstGoomba = goomba;
                         break;
-                        // pipes are spawned below as whole pieces
+
                 }
             }
         }
 
+        //spawn pipes, since pipe heights can vary
         foreach (Vector3Int p in pipes)
         {
             float centreX = origin.x + p.x + 0.5f; // pipes are 2 tiles wide
@@ -369,9 +376,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    // ---------- debug: draw the random walk ----------
-    // green = flat, yellow = step up, cyan = step down, red = pit, magenta = pit with platform,
-    // grey X = a proposal the rules rejected. white ball = the "walker" (latest revealed step)
+    //to debug random walk
     void OnDrawGizmos()
     {
         if (!drawWalk || walkSteps.Count == 0) return;
@@ -384,7 +389,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             WalkStep s = walkSteps[i];
-            float left = origin.x + s.x - 0.5f;      // left edge of the first column
+            float left = origin.x + s.x - 0.5f;
             float right = left + s.length;
             float fromY = SurfaceY(s.fromHeight);
             float toY = SurfaceY(s.toHeight);

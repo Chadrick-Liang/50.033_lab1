@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject enemies;
 
     private Vector2 marioStartPosition;
+    private Vector2 lastSafePosition; // last place Mario landed on something solid, respawn point after falling into a pit
 
     public JumpOverGoomba jumpOverGoomba;
 
@@ -49,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
         marioBody = GetComponent<Rigidbody2D>();
         // Record Mario's position at the beginning.
         marioStartPosition = marioBody.position;
+        lastSafePosition = marioStartPosition;
         cameraController = gameCamera.GetComponent<CameraController>();
 
         // order life sprites by name (Life1, Life2, ...) so they disappear in order
@@ -96,7 +98,13 @@ public class PlayerMovement : MonoBehaviour
         {
             onGroundState = true;
             // update animator state
-            //marioAnimator.SetBool("onGround", onGroundState); 
+            //marioAnimator.SetBool("onGround", onGroundState);
+        }
+
+        // remember where Mario last landed on top of something solid (normal pointing up = landed on it, not hit its side)
+        if ((collisionLayerMask & (1 << col.transform.gameObject.layer)) > 0 && col.GetContact(0).normal.y > 0.5f)
+        {
+            lastSafePosition = marioBody.position;
         }
     }
 
@@ -134,6 +142,22 @@ public class PlayerMovement : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (isRewinding || isGameOver) return; // ignore collisions while the rewind animation plays or game over screen is up
+
+        // fell into a pit: lose a life and respawn on the last ground Mario landed on
+        if (other.gameObject.CompareTag("DeathZone"))
+        {
+            if (rewindsUsed < maxRewinds) //if there are lives left
+            {
+                lifeSprites[rewindsUsed].SetActive(false);
+                rewindsUsed++;
+                RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
+            }
+            else
+            {
+                GameOver();
+            }
+            return;
+        }
 
         if (other.gameObject.CompareTag("Enemy"))
         {
@@ -198,6 +222,7 @@ public class PlayerMovement : MonoBehaviour
         // reset position
         //marioBody.transform.position = new Vector3(-5.33f, -4.69f, 0.0f);
         marioBody.position = marioStartPosition;
+        lastSafePosition = marioStartPosition;
         //make sure to remove velocity present before reset and it might rocket off
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;

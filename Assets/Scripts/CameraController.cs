@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
         // z doesn't matter since the camera is orthographic
         Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)); // the z-component is the distance of the resulting plane from the camera 
         viewportHalfWidth = Mathf.Abs(bottomLeft.x - this.transform.position.x);
-        offset = this.transform.position.x - player.position.x;
+        offset = this.transform.position.x + player.position.x;
         startX = this.transform.position.x;
         endX = endLimit.transform.position.x - viewportHalfWidth;
     }

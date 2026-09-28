@@ -6,7 +6,7 @@ public class EnemyMovement : MonoBehaviour
 {
 
     private float originalX;
-    public float maxOffset = 2.0f; // patrol distance each way, LevelGenerator overrides this with LevelRules.goombaPatrol
+    public float maxOffset = 2.0f; // patrol distance each way
     private float enemyPatroltime = 2.0f;
     private int moveRight = -1;
     private Vector2 velocity;
