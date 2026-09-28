@@ -18,6 +18,8 @@ public class EnemyMovement : MonoBehaviour
     private Transform player;
     private const float rewindDuration = 3.0f;
 
+    private const float rewindPlaybackDuration = 2.0f;
+
     private struct PositionSnapshot
     {
         public float time;
@@ -117,12 +119,39 @@ public class EnemyMovement : MonoBehaviour
         rewindPanel.SetActive(true);
 
         //play per frame rewind
-        for (int i = snapshots.Length - 1; i >= 0; i--)
+        float elapsed = 0f;
+
+        while (elapsed < rewindPlaybackDuration)
         {
-            enemyBody.position = snapshots[i].enemyPosition;
-            playerMovement.RewindTo(snapshots[i].playerPosition);
+            // Progress from 0 at the start to 1 at the end.
+            float progress = Mathf.Clamp01(elapsed / rewindPlaybackDuration);
+
+            // Travel backwards from the newest recording to the oldest.
+            float index = (snapshots.Length - 1) * (1f - progress);
+
+            int lower = Mathf.FloorToInt(index);
+            int upper = Mathf.Min(lower + 1, snapshots.Length - 1);
+            float blend = index - lower;
+
+            enemyBody.position = Vector2.Lerp(
+                snapshots[lower].enemyPosition,
+                snapshots[upper].enemyPosition,
+                blend
+            );
+
+            playerMovement.RewindTo(Vector2.Lerp(
+                snapshots[lower].playerPosition,
+                snapshots[upper].playerPosition,
+                blend
+            ));
+
             yield return new WaitForFixedUpdate();
+            elapsed += Time.fixedDeltaTime;
         }
+
+        // Finish exactly at the oldest recorded positions.
+        enemyBody.position = snapshots[0].enemyPosition;
+        playerMovement.RewindTo(snapshots[0].playerPosition);
 
         isRewinding = false;
         playerMovement.SetRewinding(false);

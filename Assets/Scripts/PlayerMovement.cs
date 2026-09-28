@@ -41,6 +41,17 @@ public class PlayerMovement : MonoBehaviour
     private bool isGameOver = false;
     private int collisionLayerMask = (1 << 3) | (1 << 6) | (1 << 7) | (1 << 8);
 
+    public Animator marioAnimator;
+
+    public AudioSource marioAudio;
+    public AudioClip marioDeath;
+    public float deathImpulse = 15;
+
+    [System.NonSerialized]
+    public bool alive = true;
+
+    public AudioClip marioRewind;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,12 +69,14 @@ public class PlayerMovement : MonoBehaviour
 
         //hide game over panel at start
         gameOverPanel.SetActive(false);
+        // set animator state to onGround at start
+        marioAnimator.SetBool("onGround", onGroundState);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isRewinding || isGameOver) return; // input disabled while the rewind animation plays or game over screen is up
+        if (isRewinding || isGameOver || !alive) return; // input disabled while the rewind animation plays or game over screen is up
 
         moveHorizontal = Input.GetAxisRaw("Horizontal");
 
@@ -81,24 +94,31 @@ public class PlayerMovement : MonoBehaviour
         {
             faceRightState = false;
             marioSprite.flipX = true;
+            if (marioBody.linearVelocity.x > 0.1f)
+                marioAnimator.SetTrigger("onSkid");
         }
 
         if (Input.GetKeyDown("d") && !faceRightState)
         {
             faceRightState = true;
             marioSprite.flipX = false;
+            if (marioBody.linearVelocity.x < -0.1f)
+                marioAnimator.SetTrigger("onSkid");
         }
+
+        marioAnimator.SetFloat("xSpeed", Mathf.Abs(marioBody.linearVelocity.x));
 
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        if (!alive || isRewinding || isGameOver) return;
 
         if (((collisionLayerMask & (1 << col.transform.gameObject.layer)) > 0) & !onGroundState)
         {
             onGroundState = true;
             // update animator state
-            //marioAnimator.SetBool("onGround", onGroundState);
+            marioAnimator.SetBool("onGround", onGroundState);
         }
 
         // remember where Mario last landed on top of something solid (normal pointing up = landed on it, not hit its side)
@@ -111,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
     // FixedUpdate is called 50 times a second
     void FixedUpdate()
     {
-        if (isRewinding || isGameOver) return; // position is driven by EnemyMovement's rewind coroutine instead
+        if (isRewinding || isGameOver || !alive) return; // position is driven by EnemyMovement's rewind coroutine instead
 
         if (Mathf.Abs(moveHorizontal) > 0)
         {
@@ -133,6 +153,8 @@ public class PlayerMovement : MonoBehaviour
         {
             marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
             onGroundState = false;
+            // update animator state
+            marioAnimator.SetBool("onGround", onGroundState);
         }
 
         jumpRequested = false;
@@ -141,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isRewinding || isGameOver) return; // ignore collisions while the rewind animation plays or game over screen is up
+        if (isRewinding || isGameOver || !alive) return; // ignore collisions while the rewind animation plays or game over screen is up
 
         // fell into a pit: lose a life and respawn on the last ground Mario landed on
         if (other.gameObject.CompareTag("DeathZone"))
@@ -150,11 +172,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 lifeSprites[rewindsUsed].SetActive(false);
                 rewindsUsed++;
+                marioAudio.PlayOneShot(marioRewind);
                 RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
             }
             else
             {
-                GameOver();
+                BeginDeath();
             }
             return;
         }
@@ -165,9 +188,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 lifeSprites[rewindsUsed].SetActive(false);
 
-
                 rewindsUsed++;
                 //Debug.Log("Rewind no:" + rewindsUsed + "/" + maxRewinds + ")");
+                marioAudio.PlayOneShot(marioRewind);
                 EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
                 {
@@ -176,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                GameOver();
+                BeginDeath();
             }
         }
     }
@@ -247,6 +270,20 @@ public class PlayerMovement : MonoBehaviour
             lifeSprite.SetActive(true);
         }
         cameraController.ResetCamera();
+
+        marioAnimator.SetTrigger("gameRestart");
+        alive = true;
+
+        jumpOverGoomba.enabled = true;
+
+        moveHorizontal = 0;
+        stopRequested = false;
+        jumpRequested = false;
+
+        onGroundState = true; // Assuming Mario restarts on the ground
+        marioAnimator.SetBool("onGround", onGroundState);
+        marioAnimator.SetFloat("xSpeed", 0f);
+        marioAnimator.ResetTrigger("onSkid");
     }
 
     private void GameOver()
@@ -261,5 +298,43 @@ public class PlayerMovement : MonoBehaviour
         gameOverPanel.SetActive(true);
 
         Time.timeScale = 0f;
+    }
+
+    void PlayJumpSound()
+    {
+        // play jump sound
+        marioAudio.PlayOneShot(marioAudio.clip);
+    }
+
+    void PlayDeathImpulse()
+    {
+        marioBody.AddForce(Vector2.up * deathImpulse, ForceMode2D.Impulse);
+    }
+
+    private void BeginDeath()
+    {
+        if (!alive || isGameOver) return;
+        marioAudio.Stop(); //prevent any leftover audio
+
+        alive = false;
+
+        moveHorizontal = 0;
+        stopRequested = false;
+        jumpRequested = false;
+
+        marioBody.linearVelocity = Vector2.zero;
+        marioBody.angularVelocity = 0;
+
+        jumpOverGoomba.enabled = false;
+
+        marioAnimator.Play("mario-die", 0, 0f);
+        marioAudio.PlayOneShot(marioDeath);
+    }
+
+    void GameOverScene()
+    {
+        if (alive || isGameOver) return;
+
+        GameOver();
     }
 }
