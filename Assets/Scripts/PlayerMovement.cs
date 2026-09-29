@@ -114,17 +114,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!alive || isRewinding || isGameOver) return;
 
-        if (((collisionLayerMask & (1 << col.transform.gameObject.layer)) > 0) & !onGroundState)
-        {
-            onGroundState = true;
-            // update animator state
-            marioAnimator.SetBool("onGround", onGroundState);
-        }
+        bool solidSurface =
+            (collisionLayerMask & (1 << col.gameObject.layer)) != 0;
 
-        // remember where Mario last landed on top of something solid (normal pointing up = landed on it, not hit its side)
-        if ((collisionLayerMask & (1 << col.transform.gameObject.layer)) > 0 && col.GetContact(0).normal.y > 0.5f)
+        if (!solidSurface) return;
+
+        for (int i = 0; i < col.contactCount; i++)
         {
-            lastSafePosition = marioBody.position;
+            // This callback runs on Mario
+            // an upward normal means a surface supports him.
+            if (col.GetContact(i).normal.y > 0.5f)
+            {
+                onGroundState = true;
+                marioAnimator.SetBool("onGround", true);
+                lastSafePosition = marioBody.position;
+                break;
+            }
         }
     }
 
@@ -284,6 +289,14 @@ public class PlayerMovement : MonoBehaviour
         marioAnimator.SetBool("onGround", onGroundState);
         marioAnimator.SetFloat("xSpeed", 0f);
         marioAnimator.ResetTrigger("onSkid");
+
+        //restore the coins in bricks
+        foreach (BrickBlock brick in
+         FindObjectsByType<BrickBlock>(FindObjectsSortMode.None))
+        {
+            brick.ResetBlock();
+        }
+
     }
 
     private void GameOver()

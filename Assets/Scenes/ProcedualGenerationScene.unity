@@ -368,11 +368,13 @@ MonoBehaviour:
   platformAttempts: 100
   groundPrefab: {fileID: 6606764461973984750, guid: 6b6a6ed9291bbde4e9ac4bb24f6603ab, type: 3}
   brickPrefab: {fileID: 7952067846304318071, guid: 151c1d1773474bf439ce342051be6dbb, type: 3}
+  coinBrickPrefab: {fileID: 6928348209437032118, guid: a116b4c1479895f43bbde318a905a0ef, type: 3}
   questionPrefab: {fileID: 883958245111712940, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
   pipeTopPrefab: {fileID: 3546875039518104350, guid: 01d0ec5688064aa46a374cb833bcf447, type: 3}
   pipeBodyPrefab: {fileID: 6144095665966703757, guid: b51d35a1fc029c341bbddb1522cd1283, type: 3}
   platformPrefab: {fileID: 8012259928604791433, guid: 616b166abd6b1b14fa6228241d7787b4, type: 3}
   goombaPrefab: {fileID: 5208457224170438220, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+  coinBrickChance: 30
   player: {fileID: 1595828814}
   enemiesParent: {fileID: 1666320687}
   endLimit: {fileID: 1200408384}
@@ -3437,7 +3439,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: bc5ca5e0703c54692a186434e1149ccd, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

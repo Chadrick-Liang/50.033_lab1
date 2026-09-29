@@ -34,11 +34,17 @@ public class LevelGenerator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject groundPrefab;
     public GameObject brickPrefab;
+    public GameObject coinBrickPrefab;
     public GameObject questionPrefab;
     public GameObject pipeTopPrefab;
     public GameObject pipeBodyPrefab;
     public GameObject platformPrefab;
     public GameObject goombaPrefab;
+
+    //30% chance to spawn coin brick instead of normal brick
+    [Header("Brick contents")]
+    [Range(0, 100)]
+    public int coinBrickChance = 30;
 
     [Header("Scene references")]
     public Transform player;
@@ -75,6 +81,7 @@ public class LevelGenerator : MonoBehaviour
         //check if correct asset is being used
         CheckIsPrefabAsset(groundPrefab);
         CheckIsPrefabAsset(brickPrefab);
+        CheckIsPrefabAsset(coinBrickPrefab);
         CheckIsPrefabAsset(questionPrefab);
         CheckIsPrefabAsset(pipeTopPrefab);
         CheckIsPrefabAsset(pipeBodyPrefab);
@@ -335,7 +342,23 @@ public class LevelGenerator : MonoBehaviour
                 switch (level.Get(x, y))
                 {   //instantiates all game objects
                     case TileType.Ground: Instantiate(groundPrefab, pos, Quaternion.identity, transform); break;
-                    case TileType.Brick: Instantiate(brickPrefab, pos, Quaternion.identity, transform); break;
+                    case TileType.Brick:
+                        {
+                            bool spawnCoinBrick =
+                                Random.Range(0, 100) < coinBrickChance;
+
+                            GameObject selectedPrefab =
+                                spawnCoinBrick ? coinBrickPrefab : brickPrefab;
+
+                            Instantiate(
+                                selectedPrefab,
+                                pos,
+                                Quaternion.identity,
+                                transform
+                            );
+
+                            break;
+                        }
                     case TileType.Question: Instantiate(questionPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Platform: Instantiate(platformPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Enemy:
