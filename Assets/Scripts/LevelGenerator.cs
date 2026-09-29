@@ -45,7 +45,6 @@ public class LevelGenerator : MonoBehaviour
     public Transform enemiesParent;
     public Transform endLimit;
     public GameObject rewindPanel;
-    public JumpOverGoomba jumpOverGoomba;
 
     [Header("Debug")]
     public bool printAscii = true;
@@ -325,8 +324,6 @@ public class LevelGenerator : MonoBehaviour
 
     void SpawnAll()
     {
-        GameObject firstGoomba = null;
-
         for (int x = 0; x < levelWidth; x++)
         {
             for (int y = 0; y < levelHeight; y++)
@@ -344,7 +341,6 @@ public class LevelGenerator : MonoBehaviour
                         EnemyMovement movement = goomba.GetComponent<EnemyMovement>();
                         movement.rewindPanel = rewindPanel;
                         movement.maxOffset = rules.maxOffset;
-                        if (firstGoomba == null) firstGoomba = goomba;
                         break;
 
                 }
@@ -367,12 +363,6 @@ public class LevelGenerator : MonoBehaviour
 
         // camera stops scrolling at the end of the generated level
         endLimit.position = new Vector3(origin.x + levelWidth - 1, endLimit.position.y, endLimit.position.z);
-
-        // JumpOverGoomba only tracks one enemy, give it the first one so it doesn't null-ref
-        if (jumpOverGoomba != null && firstGoomba != null)
-        {
-            jumpOverGoomba.enemyLocation = firstGoomba.transform;
-        }
     }
 
 

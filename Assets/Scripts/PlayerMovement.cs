@@ -33,6 +33,14 @@ public class PlayerMovement : MonoBehaviour
     private GameObject[] lifeSprites;
     private bool isRewinding = false;
 
+    // Mario's position every physics step, oldest first, played back by EnemyMovement's rewind coroutine
+    public float rewindDuration = 3.0f;
+    private List<Vector2> positionHistory = new List<Vector2>();
+    public int MaxHistoryCount => Mathf.RoundToInt(rewindDuration / Time.fixedDeltaTime);
+    public int HistoryCount => positionHistory.Count;
+    public bool IsRewinding => isRewinding;
+    public bool IsGrounded => onGroundState;
+
     public Transform gameCamera;
     private CameraController cameraController;
     public GameObject gameOverPanel;
@@ -158,6 +166,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         jumpRequested = false;
+
+        //record one snapshot per physics step, drop anything older than the rewind duration
+        positionHistory.Add(marioBody.position);
+        while (positionHistory.Count > MaxHistoryCount)
+        {
+            positionHistory.RemoveAt(0);
+        }
+    }
+
+    // returns the newest recorded position and forgets it
+    public Vector2 PopHistory()
+    {
+        Vector2 position = positionHistory[positionHistory.Count - 1];
+        positionHistory.RemoveAt(positionHistory.Count - 1);
+        return position;
     }
 
 
@@ -174,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
                 rewindsUsed++;
                 marioAudio.PlayOneShot(marioRewind);
                 RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
+                positionHistory.Clear(); // so a later goomba rewind doesn't replay the fall into the pit
             }
             else
             {
@@ -257,8 +281,11 @@ public class PlayerMovement : MonoBehaviour
         // reset Goomba
         foreach (Transform eachChild in enemies.transform)
         {
-            eachChild.transform.localPosition = eachChild.GetComponent<EnemyMovement>().startPosition;
+            EnemyMovement enemyMovement = eachChild.GetComponent<EnemyMovement>();
+            eachChild.transform.localPosition = enemyMovement.startPosition;
+            enemyMovement.ResetHistory();
         }
+        positionHistory.Clear();
 
         //reset score
         jumpOverGoomba.score = 0;

@@ -319,23 +319,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b689ef4b521074099b5ef147489d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelRules
-  maxStepUp: 6
-  maxGap: 6
+  maxStepUp: 5
+  maxGap: 5
   minGap: 3
   maxStepDown: 4
   maxStepUpAcrossGap: 4
   minRunBeforeGap: 3
   safeZoneLength: 5
   maxGapWithPlatform: 16
-  platformClearance: 3
-  blockClearance: 3
+  platformClearance: 4
+  blockClearance: 4
   maxBlockRowLength: 5
   questionChance: 0.2
   minPipeHeight: 2
-  maxPipeHeight: 5
+  maxPipeHeight: 4
   minPipeSpacing: 2
   maxOffset: 2
-  minEnemySpacing: 6
+  minEnemySpacing: 3
   dangerSpacing: 5
   edgeClearance: 2
 --- !u!114 &147690130
@@ -377,7 +377,6 @@ MonoBehaviour:
   enemiesParent: {fileID: 1666320687}
   endLimit: {fileID: 1200408384}
   rewindPanel: {fileID: 156432853}
-  jumpOverGoomba: {fileID: 1595828816}
   printAscii: 1
   drawWalk: 1
   walkRevealSpeed: 3
@@ -3229,6 +3228,7 @@ MonoBehaviour:
   enemies: {fileID: 1666320686}
   jumpOverGoomba: {fileID: 1595828816}
   maxRewinds: 2
+  rewindDuration: 3
   gameCamera: {fileID: 519420032}
   gameOverPanel: {fileID: 1182077060}
   finalScoreText: {fileID: 68147720}
@@ -3396,13 +3396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e969d37967ebd64f9fa83c4c31e6f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpOverGoomba
-  enemyLocation: {fileID: 0}
   scoreText: {fileID: 233051910}
-  boxSize: {x: 0.5, y: 1, z: 0}
-  maxDistance: 0.5
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!95 &1595828817
 Animator:
   serializedVersion: 7
