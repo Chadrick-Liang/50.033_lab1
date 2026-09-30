@@ -324,6 +324,13 @@ public class PlayerMovement : MonoBehaviour
             brick.ResetBlock();
         }
 
+        // Restore question boxes
+        foreach (QuestionBlock question in
+            FindObjectsByType<QuestionBlock>(FindObjectsSortMode.None))
+        {
+            question.ResetBlock();
+        }
+
     }
 
     private void GameOver()

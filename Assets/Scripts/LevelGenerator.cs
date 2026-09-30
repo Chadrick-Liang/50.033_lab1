@@ -44,7 +44,7 @@ public class LevelGenerator : MonoBehaviour
     //30% chance to spawn coin brick instead of normal brick
     [Header("Brick contents")]
     [Range(0, 100)]
-    public int coinBrickChance = 30;
+    public int coinBrickChance = 50;
 
     [Header("Scene references")]
     public Transform player;
