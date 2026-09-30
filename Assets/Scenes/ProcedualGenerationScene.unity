@@ -355,7 +355,7 @@ MonoBehaviour:
   levelHeight: 15
   seed: 0
   startHeight: 1
-  maxGroundHeight: 50
+  maxGroundHeight: 8
   groundTopY: -4.5
   minSegmentLength: 3
   maxSegmentLength: 12

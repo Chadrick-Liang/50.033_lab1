@@ -91,6 +91,10 @@ public class LevelGenerator : MonoBehaviour
         Random.InitState(seed);
         Debug.Log("Level seed: " + seed);
 
+        // ground must leave room above it for blocks/platforms/pipes, otherwise LevelData drops them out of bounds
+        int headroom = Mathf.Max(rules.blockClearance, rules.platformClearance, rules.maxPipeHeight) + 2;
+        maxGroundHeight = Mathf.Clamp(maxGroundHeight, startHeight, levelHeight - headroom);
+
         level = new LevelData(levelWidth, levelHeight);
         origin = new Vector2(Mathf.Round(player.position.x) - 3, groundTopY - startHeight + 0.5f);
 

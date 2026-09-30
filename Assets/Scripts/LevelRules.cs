@@ -94,6 +94,9 @@ public class LevelRules : MonoBehaviour
         // must be low enough to jump over
         if (pipeHeight < minPipeHeight || pipeHeight > maxPipeHeight || pipeHeight > maxStepUp) return false;
 
+        // must fit inside the grid (pipes are spawned from their own list, so out of bounds ones would float)
+        if (x < 0 || x + 1 >= level.width || level.groundHeight[x] + pipeHeight > level.height) return false;
+
         // flat under the pipe plus landing room on both sides (also keeps it away from pits and ledges)
         if (!level.IsFlat(x - dangerSpacing, 2 + dangerSpacing * 2)) return false;
 
