@@ -1,0 +1,112 @@
+{
+    "version": 1,
+    "name": "MarioActions",
+    "maps": [
+        {
+            "name": "gameplay",
+            "id": "03853120-97c5-49a4-8b17-0dd6224a7c05",
+            "actions": [
+                {
+                    "name": "move",
+                    "type": "Value",
+                    "id": "dbc6c7ff-4536-433d-af2c-8fbf2d30854a",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "jump",
+                    "type": "Button",
+                    "id": "0bca94b1-e873-474f-a00f-a11067c2e9e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "jumphold",
+                    "type": "Button",
+                    "id": "fa2d381c-1520-4da3-aee0-784685a598d0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fb35257d-d888-492e-9b4d-1af293861315",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "b8873f61-971b-424f-a9d0-42af602c4b05",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "312aafba-2f10-46ad-a977-be742a8f48ab",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "b4a07a40-528c-4e89-826e-c0b8c521fd02",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ea350773-aaf5-4622-a1e4-dfdd61010c61",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "jumphold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
