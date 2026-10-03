@@ -3684,7 +3684,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 6200000, guid: fa3668df4365aaf4792372497f47357f, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4293,7 +4293,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1666320687}
   - component: {fileID: 1666320688}
-  - component: {fileID: 1666320689}
   m_Layer: 7
   m_Name: Enemies
   m_TagString: Untagged
@@ -4328,28 +4327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0044693669a93d74eb1a1ee948c67798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
---- !u!95 &1666320689
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666320686}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e1e26169bce4e4b49982151cf2e8c897, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1715688502
 GameObject:
   m_ObjectHideFlags: 0

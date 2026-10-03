@@ -33,6 +33,10 @@ public class EnemyMovement : MonoBehaviour
     private const string dieState = "Goomba-die";
     public float dieDuration = 0.5f; // how long the squashed goomba stays on screen before disappearing
 
+    // AudioSource on this goomba, set its Output to the mixer's Enemies group
+    public AudioSource enemyAudio;
+    public AudioClip stompClip;
+
     private Collider2D enemyCollider;
     private bool isDead = false;
     public bool IsDead => isDead;
@@ -42,6 +46,7 @@ public class EnemyMovement : MonoBehaviour
         enemyBody = GetComponent<Rigidbody2D>();
         enemyCollider = GetComponent<Collider2D>();
         if (enemyAnimator == null) enemyAnimator = GetComponent<Animator>();
+        if (enemyAudio == null) enemyAudio = GetComponent<AudioSource>();
         //remember where goomba started
         startPosition = transform.localPosition;
         // get the starting position
@@ -86,6 +91,7 @@ public class EnemyMovement : MonoBehaviour
         isDead = true;
         enemyCollider.enabled = false; // so the squashed goomba can't hurt Mario
         enemyAnimator.Play(dieState, 0, 0f);
+        if (enemyAudio != null && stompClip != null) enemyAudio.PlayOneShot(stompClip);
         playerMovement.jumpOverGoomba.AddScore();
         StartCoroutine(DisappearAfterDeath());
     }
