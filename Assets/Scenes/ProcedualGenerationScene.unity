@@ -3684,7 +3684,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 3
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: fa3668df4365aaf4792372497f47357f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3813,8 +3813,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.9}
-  m_EdgeRadius: 0.05
+  m_Size: {x: 0.85, y: 0.85}
+  m_EdgeRadius: 0.1
 --- !u!114 &1595828816
 MonoBehaviour:
   m_ObjectHideFlags: 0

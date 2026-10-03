@@ -285,7 +285,6 @@ MonoBehaviour:
   visual: {fileID: 4398622215852357246}
   coin: {fileID: 3746078603591430630}
   coinSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
-  coinPitchVariation: 0.1
   containsCoin: 0
   bounceHeight: 0.2
   bounceDuration: 0.18
