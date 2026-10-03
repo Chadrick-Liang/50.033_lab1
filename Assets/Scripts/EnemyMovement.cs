@@ -26,12 +26,22 @@ public class EnemyMovement : MonoBehaviour
     private bool isRewinding = false;
     private GameManager gameManager;
 
-    // which side of this goomba Mario was on last step (1 = right, -1 = left), used to detect jumping over it
-    private float lastPlayerSide;
+    public Animator enemyAnimator;
+
+    // names of the states in Goomba.controller, played directly so the controller needs no parameters or transitions
+    private const string idleState = "Goomba";
+    private const string dieState = "Goomba-die";
+    public float dieDuration = 0.5f; // how long the squashed goomba stays on screen before disappearing
+
+    private Collider2D enemyCollider;
+    private bool isDead = false;
+    public bool IsDead => isDead;
 
     void Start()
     {
         enemyBody = GetComponent<Rigidbody2D>();
+        enemyCollider = GetComponent<Collider2D>();
+        if (enemyAnimator == null) enemyAnimator = GetComponent<Animator>();
         //remember where goomba started
         startPosition = transform.localPosition;
         // get the starting position
@@ -41,8 +51,6 @@ public class EnemyMovement : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform; //get mario's game object to detect collision
         playerMovement = player.GetComponent<PlayerMovement>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
-        lastPlayerSide = PlayerSide();
-
     }
     void ComputeVelocity()
     {
@@ -55,6 +63,7 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return; // squashed, waiting to disappear
         if (isRewinding) return; // frozen while the rewind coroutine drives our position
 
         // turn around at either end of the patrol, based on which end we're past so a rewind can't leave us stuck flipping
@@ -68,7 +77,23 @@ public class EnemyMovement : MonoBehaviour
         Movegoomba();
 
         RecordHistory();
-        CheckJumpedOver();
+    }
+
+    // called by PlayerMovement when Mario lands on top of this goomba
+    public void Stomp()
+    {
+        if (isDead) return;
+        isDead = true;
+        enemyCollider.enabled = false; // so the squashed goomba can't hurt Mario
+        enemyAnimator.Play(dieState, 0, 0f);
+        playerMovement.jumpOverGoomba.AddScore();
+        StartCoroutine(DisappearAfterDeath());
+    }
+
+    private IEnumerator DisappearAfterDeath()
+    {
+        yield return new WaitForSeconds(dieDuration);
+        gameObject.SetActive(false); // not destroyed, so GameRestart can bring it back
     }
 
     //rewind mechanic (recording function), one snapshot per physics step, same as PlayerMovement
@@ -84,6 +109,14 @@ public class EnemyMovement : MonoBehaviour
 
     public void GameRestart()
     {
+        // revive if it was stomped
+        StopAllCoroutines();
+        isDead = false;
+        isRewinding = false;
+        gameObject.SetActive(true);
+        enemyCollider.enabled = true;
+        enemyAnimator.Play(idleState, 0, 0f);
+
         transform.localPosition = startPosition;
         originalX = transform.position.x;
         moveRight = -1;
@@ -94,23 +127,6 @@ public class EnemyMovement : MonoBehaviour
     public void ResetHistory()
     {
         history.Clear();
-        if (enemyBody != null) lastPlayerSide = PlayerSide();
-    }
-
-    private float PlayerSide()
-    {
-        return player.position.x >= transform.position.x ? 1f : -1f;
-    }
-
-    // score when Mario crosses from one side of this goomba to the other while in the air above it
-    private void CheckJumpedOver()
-    {
-        float side = PlayerSide();
-        if (side != lastPlayerSide && !playerMovement.IsGrounded && player.position.y > enemyBody.position.y + 0.5f)
-        {
-            playerMovement.jumpOverGoomba.AddScore();
-        }
-        lastPlayerSide = side;
     }
 
     // rewind mechanic (playback function), called by PlayerMovement on the goomba Mario touched
@@ -165,6 +181,5 @@ public class EnemyMovement : MonoBehaviour
     private void EndRewind()
     {
         isRewinding = false;
-        lastPlayerSide = PlayerSide(); // Mario teleported, don't count that as jumping over us
     }
 }

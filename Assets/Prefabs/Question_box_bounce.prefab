@@ -415,7 +415,7 @@ AudioSource:
   m_GameObject: {fileID: 3455981561819694096}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8777183534632525927, guid: 99273ab4f6671ed40b920730c8e74d77, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -536,6 +536,7 @@ GameObject:
   - component: {fileID: 4644130854248826671}
   - component: {fileID: 7935430319777517061}
   - component: {fileID: 6831755106301922000}
+  - component: {fileID: 4819016550294614736}
   m_Layer: 8
   m_Name: coin
   m_TagString: Untagged
@@ -639,3 +640,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4819016550294614736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907080605942694724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bd463fd5568d3b49ae56a4319d40a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventIntTool
+  parameter: 1
+  useInt:
+    m_PersistentCalls:
+      m_Calls: []

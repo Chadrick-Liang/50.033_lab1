@@ -51,6 +51,33 @@ public class QuestionBlock : MonoBehaviour
         ResetBlock();
     }
 
+    GameManager gameManager;
+    private AnimationEventIntTool coinEvent;
+
+    void Start()
+    {
+        // observe the GameManager's restart event so this block resets itself
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
+        gameManager.gameRestart.AddListener(ResetBlock);
+
+        // the coin announces "collected, worth X" and GameManager adds it to the score
+        // linked here because a prefab can't reference the scene's GameManager in the inspector
+        if (!coin.TryGetComponent(out coinEvent))
+        {
+            coinEvent = coin.gameObject.AddComponent<AnimationEventIntTool>();
+            coinEvent.parameter = 1;
+        }
+        coinEvent.useInt ??= new UnityEngine.Events.UnityEvent<int>();
+        coinEvent.useInt.AddListener(gameManager.IncreaseScore);
+    }
+
+    void OnDestroy()
+    {
+        if (gameManager == null) return;
+        gameManager.gameRestart.RemoveListener(ResetBlock);
+        coinEvent.useInt.RemoveListener(gameManager.IncreaseScore);
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (!enabled || used) return;
@@ -160,6 +187,8 @@ public class QuestionBlock : MonoBehaviour
         coin.transform.localPosition = coinStartLocalPosition;
         coin.enabled = false;
         coinAnimator.enabled = false;
+
+        coinEvent.TriggerIntEvent();
     }
 
     public void ResetBlock()

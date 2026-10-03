@@ -38,14 +38,22 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip marioDeath;
     public float deathImpulse = 15;
 
+    public float stompBounce = 10; // upward speed Mario gets after squashing a goomba
+    public float stompTolerance = 0.25f; // how far below the goomba's top Mario's centre can be and still count as a stomp
+
     [System.NonSerialized]
     public bool alive = true;
 
     public AudioClip marioRewind;
 
+    // second AudioSource for rewind/death, set its Output to the mixer group that ducks the music
+    public AudioSource duckAudio;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (duckAudio == null) duckAudio = marioAudio;
+
         marioSprite = GetComponent<SpriteRenderer>();
         // Set to be 30 FPS
         Application.targetFrameRate = 30;
@@ -198,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (gameManager.UseLife()) //if there are lives left
             {
-                marioAudio.PlayOneShot(marioRewind);
+                duckAudio.PlayOneShot(marioRewind);
                 RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
                 positionHistory.Clear(); // so a later goomba rewind doesn't replay the fall into the pit
             }
@@ -211,10 +219,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
+            EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+
+            // landed on its head while falling: squash it and bounce off instead of getting hurt
+            bool stomped = marioBody.linearVelocity.y < 0 && marioBody.position.y > other.bounds.max.y - stompTolerance;
+            if (stomped && enemyMovement != null)
+            {
+                enemyMovement.Stomp();
+                marioBody.linearVelocity = new Vector2(marioBody.linearVelocity.x, stompBounce);
+                return;
+            }
+
             if (gameManager.UseLife()) //if there are lives left
             {
-                marioAudio.PlayOneShot(marioRewind);
-                EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
+                duckAudio.PlayOneShot(marioRewind);
                 if (enemyMovement != null)
                 {
                     enemyMovement.Rewind(this); //call rewind function
@@ -298,7 +316,7 @@ public class PlayerMovement : MonoBehaviour
         jumpOverGoomba.enabled = false;
 
         marioAnimator.Play("mario-die", 0, 0f);
-        marioAudio.PlayOneShot(marioDeath);
+        duckAudio.PlayOneShot(marioDeath);
     }
 
     void GameOverScene()
