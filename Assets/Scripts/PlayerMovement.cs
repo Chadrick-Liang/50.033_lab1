@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using TMPro;
-using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,22 +12,13 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer marioSprite;
     private bool faceRightState = true;
 
-    //Stores input read by Update()
-    private float moveHorizontal;
-    private bool stopRequested;
-    private bool jumpRequested;
-
-    public TextMeshProUGUI scoreText;
-    public GameObject enemies;
+    GameManager gameManager;
 
     private Vector2 marioStartPosition;
     private Vector2 lastSafePosition; // last place Mario landed on something solid, respawn point after falling into a pit
 
     public JumpOverGoomba jumpOverGoomba;
 
-    public int maxRewinds = 2;
-    private int rewindsUsed = 0;
-    private GameObject[] lifeSprites;
     private bool isRewinding = false;
 
     // Mario's position every physics step, oldest first, played back by EnemyMovement's rewind coroutine
@@ -40,11 +28,6 @@ public class PlayerMovement : MonoBehaviour
     public int HistoryCount => positionHistory.Count;
     public bool IsRewinding => isRewinding;
     public bool IsGrounded => onGroundState;
-
-    public Transform gameCamera;
-    private CameraController cameraController;
-    public GameObject gameOverPanel;
-    public TextMeshProUGUI finalScoreText;
 
     private bool isGameOver = false;
     private int collisionLayerMask = (1 << 3) | (1 << 6) | (1 << 7) | (1 << 8);
@@ -70,13 +53,8 @@ public class PlayerMovement : MonoBehaviour
         // Record Mario's position at the beginning.
         marioStartPosition = marioBody.position;
         lastSafePosition = marioStartPosition;
-        cameraController = gameCamera.GetComponent<CameraController>();
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
 
-        // order life sprites by name (Life1, Life2, ...) so they disappear in order
-        lifeSprites = GameObject.FindGameObjectsWithTag("Life").OrderBy(go => go.name).ToArray();
-
-        //hide game over panel at start
-        gameOverPanel.SetActive(false);
         // set animator state to onGround at start
         marioAnimator.SetBool("onGround", onGroundState);
     }
@@ -86,36 +64,27 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isRewinding || isGameOver || !alive) return; // input disabled while the rewind animation plays or game over screen is up
 
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        marioAnimator.SetFloat("xSpeed", Mathf.Abs(marioBody.linearVelocity.x));
+    }
 
-        if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
-        {
-            stopRequested = true;
-        }
-
-        if (Input.GetKeyDown("space"))
-        {
-            jumpRequested = true;
-        }
-        //toggle state of facing right or left
-        if (Input.GetKeyDown("a") && faceRightState)
+    void FlipMarioSprite(int value)
+    {
+        if (value == -1 && faceRightState)
         {
             faceRightState = false;
             marioSprite.flipX = true;
-            if (marioBody.linearVelocity.x > 0.1f)
+            if (marioBody.linearVelocity.x > 0.05f)
                 marioAnimator.SetTrigger("onSkid");
+
         }
 
-        if (Input.GetKeyDown("d") && !faceRightState)
+        else if (value == 1 && !faceRightState)
         {
             faceRightState = true;
             marioSprite.flipX = false;
-            if (marioBody.linearVelocity.x < -0.1f)
+            if (marioBody.linearVelocity.x < -0.05f)
                 marioAnimator.SetTrigger("onSkid");
         }
-
-        marioAnimator.SetFloat("xSpeed", Mathf.Abs(marioBody.linearVelocity.x));
-
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -141,42 +110,73 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private bool moving = false;
     // FixedUpdate is called 50 times a second
     void FixedUpdate()
     {
         if (isRewinding || isGameOver || !alive) return; // position is driven by EnemyMovement's rewind coroutine instead
 
-        if (Mathf.Abs(moveHorizontal) > 0)
+        if (alive && moving)
         {
-            Vector2 movement = new Vector2(moveHorizontal, 0);
-            // check if it doesn't go beyond maxSpeed
-            if (marioBody.linearVelocity.magnitude < maxSpeed)
-                marioBody.AddForce(movement * speed);
+            Move(faceRightState == true ? 1 : -1);
         }
-
-        // stop
-        if (stopRequested)
-        {
-            // stop
-            marioBody.linearVelocity = Vector2.zero;
-            stopRequested = false;
-        }
-
-        if (jumpRequested && onGroundState)
-        {
-            marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
-            onGroundState = false;
-            // update animator state
-            marioAnimator.SetBool("onGround", onGroundState);
-        }
-
-        jumpRequested = false;
 
         //record one snapshot per physics step, drop anything older than the rewind duration
         positionHistory.Add(marioBody.position);
         while (positionHistory.Count > MaxHistoryCount)
         {
             positionHistory.RemoveAt(0);
+        }
+    }
+
+    void Move(int value)
+    {
+
+        Vector2 movement = new Vector2(value, 0);
+        // check if it doesn't go beyond maxSpeed
+        if (marioBody.linearVelocity.magnitude < maxSpeed)
+            marioBody.AddForce(movement * speed);
+    }
+
+    public void MoveCheck(int value)
+    {
+        if (value == 0)
+        {
+            moving = false;
+            marioBody.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            FlipMarioSprite(value);
+            moving = true;
+            Move(value);
+        }
+    }
+
+    private bool jumpedState = false;
+
+    public void Jump()
+    {
+        if (alive && onGroundState)
+        {
+            // jump
+            marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
+            onGroundState = false;
+            jumpedState = true;
+            // update animator state
+            marioAnimator.SetBool("onGround", onGroundState);
+
+        }
+    }
+
+    public void JumpHold()
+    {
+        if (alive && jumpedState)
+        {
+            // jump higher
+            marioBody.AddForce(Vector2.up * upSpeed * 30, ForceMode2D.Force);
+            jumpedState = false;
+
         }
     }
 
@@ -196,10 +196,8 @@ public class PlayerMovement : MonoBehaviour
         // fell into a pit: lose a life and respawn on the last ground Mario landed on
         if (other.gameObject.CompareTag("DeathZone"))
         {
-            if (rewindsUsed < maxRewinds) //if there are lives left
+            if (gameManager.UseLife()) //if there are lives left
             {
-                lifeSprites[rewindsUsed].SetActive(false);
-                rewindsUsed++;
                 marioAudio.PlayOneShot(marioRewind);
                 RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
                 positionHistory.Clear(); // so a later goomba rewind doesn't replay the fall into the pit
@@ -213,12 +211,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy"))
         {
-            if (rewindsUsed < maxRewinds) //if there are lives left
+            if (gameManager.UseLife()) //if there are lives left
             {
-                lifeSprites[rewindsUsed].SetActive(false);
-
-                rewindsUsed++;
-                //Debug.Log("Rewind no:" + rewindsUsed + "/" + maxRewinds + ")");
                 marioAudio.PlayOneShot(marioRewind);
                 EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
@@ -247,32 +241,16 @@ public class PlayerMovement : MonoBehaviour
         isRewinding = rewinding;
         if (rewinding)
         {
-            moveHorizontal = 0;
-            stopRequested = false;
-            jumpRequested = false;
             marioBody.linearVelocity = Vector2.zero;
             marioBody.angularVelocity = 0;
         }
     }
 
-    public void RestartButtonCallback(int input)
+    // subscribed to GameManager.gameRestart
+    public void GameRestart()
     {
-        //Debug.Log("Restart!");
-        // reset everything
-        ResetGame();
         isGameOver = false;
-        gameOverPanel.SetActive(false);
-        // resume time
-        Time.timeScale = 1.0f;
-
-        //deselect UI button so that keyboard can be used without accidentally triggering it again
-        EventSystem.current.SetSelectedGameObject(null);
-    }
-
-    private void ResetGame()
-    {
         // reset position
-        //marioBody.transform.position = new Vector3(-5.33f, -4.69f, 0.0f);
         marioBody.position = marioStartPosition;
         lastSafePosition = marioStartPosition;
         //make sure to remove velocity present before reset and it might rocket off
@@ -281,70 +259,18 @@ public class PlayerMovement : MonoBehaviour
         // reset sprite direction
         faceRightState = true;
         marioSprite.flipX = false;
-        // reset score
-        scoreText.text = "Score: 0";
-        // reset Goomba
-        foreach (Transform eachChild in enemies.transform)
-        {
-            EnemyMovement enemyMovement = eachChild.GetComponent<EnemyMovement>();
-            eachChild.transform.localPosition = enemyMovement.startPosition;
-            enemyMovement.ResetHistory();
-        }
         positionHistory.Clear();
-
-        //reset score
-        jumpOverGoomba.score = 0;
-
-        // reset rewind lives
-        rewindsUsed = 0;
-        foreach (GameObject lifeSprite in lifeSprites)
-        {
-            lifeSprite.SetActive(true);
-        }
-        cameraController.ResetCamera();
 
         marioAnimator.SetTrigger("gameRestart");
         alive = true;
 
         jumpOverGoomba.enabled = true;
 
-        moveHorizontal = 0;
-        stopRequested = false;
-        jumpRequested = false;
 
         onGroundState = true; // Assuming Mario restarts on the ground
         marioAnimator.SetBool("onGround", onGroundState);
         marioAnimator.SetFloat("xSpeed", 0f);
         marioAnimator.ResetTrigger("onSkid");
-
-        //restore the coins in bricks
-        foreach (BrickBlock brick in
-         FindObjectsByType<BrickBlock>(FindObjectsSortMode.None))
-        {
-            brick.ResetBlock();
-        }
-
-        // Restore question boxes
-        foreach (QuestionBlock question in
-            FindObjectsByType<QuestionBlock>(FindObjectsSortMode.None))
-        {
-            question.ResetBlock();
-        }
-
-    }
-
-    private void GameOver()
-    {
-        isGameOver = true;
-
-        moveHorizontal = 0;
-        stopRequested = false;
-        jumpRequested = false;
-
-        finalScoreText.text = "Score: " + jumpOverGoomba.score;
-        gameOverPanel.SetActive(true);
-
-        Time.timeScale = 0f;
     }
 
     void PlayJumpSound()
@@ -365,9 +291,6 @@ public class PlayerMovement : MonoBehaviour
 
         alive = false;
 
-        moveHorizontal = 0;
-        stopRequested = false;
-        jumpRequested = false;
 
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;
@@ -382,6 +305,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (alive || isGameOver) return;
 
-        GameOver();
+        isGameOver = true;
+        gameManager.GameOver();
     }
 }

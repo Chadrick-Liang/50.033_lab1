@@ -24,7 +24,7 @@ public class EnemyMovement : MonoBehaviour
     // this goomba's position every physics step, oldest first, trimmed to PlayerMovement.rewindDuration
     private List<Vector2> history = new List<Vector2>();
     private bool isRewinding = false;
-    public GameObject rewindPanel;
+    private GameManager gameManager;
 
     // which side of this goomba Mario was on last step (1 = right, -1 = left), used to detect jumping over it
     private float lastPlayerSide;
@@ -40,9 +40,9 @@ public class EnemyMovement : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform; //get mario's game object to detect collision
         playerMovement = player.GetComponent<PlayerMovement>();
+        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
         lastPlayerSide = PlayerSide();
 
-        rewindPanel.SetActive(false); // only shown while the rewind animation plays
     }
     void ComputeVelocity()
     {
@@ -80,6 +80,15 @@ public class EnemyMovement : MonoBehaviour
         {
             history.RemoveAt(0);
         }
+    }
+
+    public void GameRestart()
+    {
+        transform.localPosition = startPosition;
+        originalX = transform.position.x;
+        moveRight = -1;
+        ComputeVelocity();
+        ResetHistory();
     }
 
     public void ResetHistory()
@@ -124,7 +133,7 @@ public class EnemyMovement : MonoBehaviour
         //set bool to prevent user action during animation
         foreach (EnemyMovement enemy in enemies) enemy.isRewinding = true;
         playerMovement.SetRewinding(true);
-        rewindPanel.SetActive(true);
+        gameManager.RewindStart();
 
         //play back the recorded steps newest to oldest until Mario's history (3s) runs out
         float stepsToPlay = 0f;
@@ -142,7 +151,7 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (EnemyMovement enemy in enemies) enemy.EndRewind();
         playerMovement.SetRewinding(false);
-        rewindPanel.SetActive(false);
+        gameManager.RewindEnd();
     }
 
     // move to the newest recorded position and forget it

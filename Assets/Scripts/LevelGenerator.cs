@@ -50,7 +50,6 @@ public class LevelGenerator : MonoBehaviour
     public Transform player;
     public Transform enemiesParent;
     public Transform endLimit;
-    public GameObject rewindPanel;
 
     [Header("Debug")]
     public bool printAscii = true;
@@ -363,10 +362,9 @@ public class LevelGenerator : MonoBehaviour
                     case TileType.Question: Instantiate(questionPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Platform: Instantiate(platformPrefab, pos, Quaternion.identity, transform); break;
                     case TileType.Enemy:
-                        // parented under Enemies so PlayerMovement.ResetGame() resets them
+                        // parented under Enemies so EnemyManager.GameRestart() resets them
                         GameObject goomba = Instantiate(goombaPrefab, pos, Quaternion.identity, enemiesParent);
                         EnemyMovement movement = goomba.GetComponent<EnemyMovement>();
-                        movement.rewindPanel = rewindPanel;
                         movement.maxOffset = rules.maxOffset;
                         break;
 

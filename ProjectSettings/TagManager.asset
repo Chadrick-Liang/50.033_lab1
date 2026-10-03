@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Life
   - DeathZone
+  - Manager
   layers:
   - Default
   - TransparentFX
