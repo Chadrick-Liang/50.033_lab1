@@ -7,6 +7,9 @@ public class EnemyMovement : MonoBehaviour
 
     private float originalX;
     public float maxOffset = 2.0f; // patrol distance each way
+
+    public bool turnAtObstacles = false;
+    public LayerMask obstacleLayers;
     private float enemyPatroltime = 2.0f;
     private int moveRight = -1;
     private Vector2 velocity;
@@ -79,8 +82,48 @@ public class EnemyMovement : MonoBehaviour
             moveRight *= -1;
             ComputeVelocity();
         }
-        Movegoomba();
+        else if (turnAtObstacles)
+        {
+            float lookAhead = enemyCollider.bounds.extents.x
+                + Mathf.Abs(velocity.x) * Time.fixedDeltaTime
+                + 0.1f;
 
+            RaycastHit2D hit = Physics2D.Raycast(
+                (Vector2)enemyCollider.bounds.center,
+                Vector2.right * moveRight,
+                lookAhead,
+                obstacleLayers
+            );
+
+            if (hit.collider != null)
+            {
+                moveRight *= -1;
+                ComputeVelocity();
+            }
+            else
+            {
+                Vector2 direction = Vector2.right * moveRight;
+                Vector2 rayStart = (Vector2)enemyCollider.bounds.center
+                    + direction * (enemyCollider.bounds.extents.x + 0.01f);
+                float enemyLookAhead = Mathf.Abs(velocity.x) * Time.fixedDeltaTime + 0.1f;
+
+                RaycastHit2D enemyHit = Physics2D.Raycast(
+                    rayStart,
+                    direction,
+                    enemyLookAhead,
+                    LayerMask.GetMask("Enemies")
+                );
+
+                if (enemyHit.collider != null &&
+                    enemyHit.collider != enemyCollider &&
+                    enemyHit.collider.GetComponent<EnemyMovement>() != null)
+                {
+                    moveRight *= -1;
+                    ComputeVelocity();
+                }
+            }
+        }
+        Movegoomba();
         RecordHistory();
     }
 

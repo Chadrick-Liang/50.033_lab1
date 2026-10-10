@@ -11,6 +11,10 @@ public class CameraController : MonoBehaviour
     private float startX; // smallest x-coordinate of the Camera
     private float endX; // largest x-coordinate of the camera
     private float viewportHalfWidth;
+    public bool followY = false;
+    private float yOffset;
+    private float startY;
+    public float yFollowSpeed = 5f;
 
     void Start()
     {
@@ -18,23 +22,45 @@ public class CameraController : MonoBehaviour
         // z doesn't matter since the camera is orthographic
         Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0)); // the z-component is the distance of the resulting plane from the camera 
         viewportHalfWidth = Mathf.Abs(bottomLeft.x - this.transform.position.x);
-        offset = this.transform.position.x + player.position.x;
-        startX = this.transform.position.x;
+        offset = transform.position.x - player.position.x;
+        yOffset = transform.position.y - player.position.y;
+        startY = transform.position.y;
+        startX = transform.position.x;
         endX = endLimit.transform.position.x - viewportHalfWidth;
     }
 
     void Update()
     {
-        float desiredX = player.position.x - offset;
-        // check if desiredX is within startX and endX
+        float desiredX = player.position.x + offset;
+        float desiredY = player.position.y + yOffset;
+
+        float newX = transform.position.x;
+
+        // Restrict horizontal movement to the level.
         if (desiredX >= startX && desiredX <= endX)
-            this.transform.position = new Vector3(desiredX, this.transform.position.y, this.transform.position.z);
+            newX = desiredX;
+
+        // Keep the current height unless Mario moves beyond the dead zone to avoid tracking micro movements
+        float newY = followY ? transform.position.y : startY;
+
+        if (followY && Mathf.Abs(desiredY - transform.position.y) > 0.05f)
+        {
+            newY = desiredY;
+        }
+
+        transform.position = new Vector3(newX, newY, transform.position.z);
     }
 
     // reset camera to start
     public void ResetCamera()
     {
-        this.transform.position = new Vector3(startX, this.transform.position.y, this.transform.position.z);
+        float resetY = followY ? startY : transform.position.y;
+
+        transform.position = new Vector3(
+            startX,
+            resetY,
+            transform.position.z
+        );
     }
 
 }
