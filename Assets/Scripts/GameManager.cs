@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     // events
     public UnityEvent gameStart;

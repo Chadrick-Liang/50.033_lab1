@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : Singleton<PlayerMovement>
 {
     public float speed = 10;
     private Rigidbody2D marioBody;
@@ -65,6 +66,28 @@ public class PlayerMovement : MonoBehaviour
 
         // set animator state to onGround at start
         marioAnimator.SetBool("onGround", onGroundState);
+        SceneManager.activeSceneChanged += SetStartingPosition;
+    }
+
+    public void SetStartingPosition(Scene currentScene, Scene nextScene)
+    {
+        if (nextScene.name == "world_1-2")
+        {
+            Vector2 newStartPosition = new Vector2(7.22f, 4.53f);
+
+            marioBody.position = newStartPosition;
+            transform.position = new Vector3(
+                newStartPosition.x,
+                newStartPosition.y,
+                0f
+            );
+
+            marioBody.linearVelocity = Vector2.zero;
+            marioBody.angularVelocity = 0f;
+
+            marioStartPosition = newStartPosition;
+            lastSafePosition = newStartPosition;
+        }
     }
 
     // Update is called once per frame
