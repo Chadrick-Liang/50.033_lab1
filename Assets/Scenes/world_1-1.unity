@@ -1192,6 +1192,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4453290449543655736, guid: 84709e5325a68ec44b494c8a774f7c25, type: 3}
   m_PrefabInstance: {fileID: 454200421068319836}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &572152014
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 633708881}
+    m_Modifications:
+    - target: {fileID: 1119379678925742143, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_Name
+      value: Question_box_mushroom
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+--- !u!4 &572152015 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3012155916392066604, guid: 377a5fb06ffdefc46a11ca893f7f8237, type: 3}
+  m_PrefabInstance: {fileID: 572152014}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &572981203 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2789682531875416615, guid: 151c1d1773474bf439ce342051be6dbb, type: 3}
@@ -1209,6 +1271,7 @@ GameObject:
   - component: {fileID: 597676812}
   - component: {fileID: 597676811}
   - component: {fileID: 597676810}
+  - component: {fileID: 597676813}
   m_Layer: 5
   m_Name: RestartButton
   m_TagString: Untagged
@@ -1279,13 +1342,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1595828811}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: RestartButtonCallback
-        m_Mode: 3
+      - m_Target: {fileID: 597676813}
+        m_TargetAssemblyTypeName: RestartButtonController, Assembly-CSharp
+        m_MethodName: ButtonClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1329,6 +1392,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 597676808}
   m_CullTransparentMesh: 1
+--- !u!114 &597676813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597676808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca3eb719f948774ca0233165538fef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonController
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,6 +1517,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 572152015}
   - {fileID: 2027898970}
   - {fileID: 572981203}
   - {fileID: 1461133747}
@@ -1675,6 +1751,153 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &932166542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 932166543}
+  - component: {fileID: 932166547}
+  - component: {fileID: 932166546}
+  - component: {fileID: 932166545}
+  - component: {fileID: 932166544}
+  m_Layer: 5
+  m_Name: PauseButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &932166543
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932166542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2080831891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1102, y: 652}
+  m_SizeDelta: {x: 60, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &932166544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932166542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320705314a543544b99173aa88fc2b2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseButtonController
+  pauseIcon: {fileID: 1506512001392234847, guid: 909978dc33ff63247b4ee886c7bc89c6, type: 3}
+  playIcon: {fileID: 8435151228427288224, guid: bb17b20d1283ab547bd0a016a9005747, type: 3}
+--- !u!114 &932166545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932166542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 0
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 932166546}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 932166544}
+        m_TargetAssemblyTypeName: PauseButtonController, Assembly-CSharp
+        m_MethodName: ButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &932166546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932166542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 1506512001392234847, guid: 909978dc33ff63247b4ee886c7bc89c6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &932166547
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932166542}
+  m_CullTransparentMesh: 1
 --- !u!1 &948907618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2252,7 +2475,7 @@ Transform:
   m_GameObject: {fileID: 1200408383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 50.6, y: 0, z: 0}
+  m_LocalPosition: {x: 70, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3415,6 +3638,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1666320687}
+  - component: {fileID: 1666320688}
   m_Layer: 7
   m_Name: Enemies
   m_TagString: Untagged
@@ -3438,6 +3662,18 @@ Transform:
   - {fileID: 1531266917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1666320688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666320686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0044693669a93d74eb1a1ee948c67798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
 --- !u!1 &1675708168
 GameObject:
   m_ObjectHideFlags: 0
@@ -3465,7 +3701,7 @@ Transform:
   m_GameObject: {fileID: 1675708168}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60, y: -4.5, z: 0}
+  m_LocalPosition: {x: 50, y: -4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3541,6 +3777,7 @@ GameObject:
   - component: {fileID: 1715688506}
   - component: {fileID: 1715688505}
   - component: {fileID: 1715688504}
+  - component: {fileID: 1715688507}
   m_Layer: 5
   m_Name: GameOverRestartButton
   m_TagString: Untagged
@@ -3611,13 +3848,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1595828811}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: RestartButtonCallback
-        m_Mode: 3
+      - m_Target: {fileID: 1715688507}
+        m_TargetAssemblyTypeName: RestartButtonController, Assembly-CSharp
+        m_MethodName: ButtonClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3661,6 +3898,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715688502}
   m_CullTransparentMesh: 1
+--- !u!114 &1715688507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715688502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca3eb719f948774ca0233165538fef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonController
 --- !u!1 &1769945896
 GameObject:
   m_ObjectHideFlags: 0
@@ -4267,12 +4516,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066311090}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 31.74956, y: 16.90567, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2119185625}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &2066311092
 AudioSource:
@@ -4383,6 +4632,7 @@ GameObject:
   - component: {fileID: 2080831890}
   - component: {fileID: 2080831889}
   - component: {fileID: 2080831888}
+  - component: {fileID: 2080831892}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4471,6 +4721,7 @@ RectTransform:
   - {fileID: 293306702}
   - {fileID: 1182077061}
   - {fileID: 156432854}
+  - {fileID: 932166543}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4478,6 +4729,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2080831892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ea2e44e15b724d4cbe1921b7aa84047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HUDManager
+  scoreText: {fileID: 233051910}
+  gameOverPanel: {fileID: 1182077060}
+  finalScoreText: {fileID: 68147720}
+  rewindPanel: {fileID: 156432853}
 --- !u!1 &2119185622
 GameObject:
   m_ObjectHideFlags: 0
@@ -4487,7 +4754,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2119185625}
-  - component: {fileID: 2119185624}
   - component: {fileID: 2119185623}
   m_Layer: 0
   m_Name: Manager
@@ -4510,162 +4776,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: GameStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   gameRestart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: GameRestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EnemyManager, Assembly-CSharp
-        m_MethodName: GameRestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: ResetCamera
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: GameRestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   scoreChange:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: SetScore
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   livesChange:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: SetLives
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   gameOver:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: GameOver
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   rewindStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: ShowRewindPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   rewindEnd:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2119185624}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: HideRewindPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   maxRewinds: 2
---- !u!114 &2119185624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119185622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ea2e44e15b724d4cbe1921b7aa84047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HUDManager
-  scoreText: {fileID: 233051910}
-  gameOverPanel: {fileID: 1182077060}
-  finalScoreText: {fileID: 68147720}
-  rewindPanel: {fileID: 156432853}
 --- !u!4 &2119185625
 Transform:
   m_ObjectHideFlags: 0
@@ -4678,8 +4808,7 @@ Transform:
   m_LocalPosition: {x: 31.74956, y: 16.90567, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2066311091}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2136240788
@@ -5142,3 +5271,4 @@ SceneRoots:
   - {fileID: 1533470284}
   - {fileID: 2119185625}
   - {fileID: 1675708169}
+  - {fileID: 2066311091}

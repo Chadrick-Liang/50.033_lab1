@@ -16,6 +16,11 @@ public class CameraController : MonoBehaviour
     private float startY;
     public float yFollowSpeed = 5f;
 
+    void Awake()
+    {
+        GameManager.instance.gameRestart.AddListener(ResetCamera);
+    }
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;

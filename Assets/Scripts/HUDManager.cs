@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 
-public class HUDManager : Singleton<HUDManager>
+public class HUDManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public GameObject gameOverPanel;
@@ -13,14 +13,19 @@ public class HUDManager : Singleton<HUDManager>
 
     private GameObject[] lifeSprites;
 
-    public override void Awake()
+    void Awake()
     {
-        base.Awake();
-
-        // Order life sprites by name (Life1, Life2, ...) so they disappear in order.
         lifeSprites = GameObject.FindGameObjectsWithTag("Life")
             .OrderBy(go => go.name)
             .ToArray();
+
+        GameManager.instance.gameStart.AddListener(GameStart);
+        GameManager.instance.gameRestart.AddListener(GameRestart);
+        GameManager.instance.scoreChange.AddListener(SetScore);
+        GameManager.instance.livesChange.AddListener(SetLives);
+        GameManager.instance.gameOver.AddListener(GameOver);
+        GameManager.instance.rewindStart.AddListener(ShowRewindPanel);
+        GameManager.instance.rewindEnd.AddListener(HideRewindPanel);
     }
 
     public void GameStart()

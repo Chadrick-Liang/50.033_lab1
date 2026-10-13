@@ -10,6 +10,11 @@ public class EnemyManager : MonoBehaviour
 
     }
 
+    void Awake()
+    {
+        GameManager.instance.gameRestart.AddListener(GameRestart);
+    }
+
     // Update is called once per frame
     void Update()
     {
