@@ -982,6 +982,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 633708881}
     m_Modifications:
+    - target: {fileID: 2105921468607806790, guid: 151c1d1773474bf439ce342051be6dbb, type: 3}
+      propertyPath: breakableBySuperMario
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2789682531875416615, guid: 151c1d1773474bf439ce342051be6dbb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.8
