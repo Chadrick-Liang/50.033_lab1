@@ -1,9 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
+    public IntVariable gameScore;
+    public TextMeshProUGUI topScoreText;
+
+    void Start()
+    {
+        int highscore = PlayerPrefs.GetInt("highscore", 0);
+        topScoreText.text = "TOP- " + highscore.ToString("D6");
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("LoadingScene");
@@ -11,14 +21,15 @@ public class MainMenuController : MonoBehaviour
 
     public void ResetHighscore()
     {
-        PlayerPrefs.SetInt("highscore", 0);
-        PlayerPrefs.Save();
+        gameScore.ResetHighestValue();
+        topScoreText.text = "TOP- " + 0.ToString("D6");
         Debug.Log("Highscore reset to 0.");
     }
 
-    // Called after button click to deselect the button
+
     public void DeselectCurrentButton()
     {
         EventSystem.current.SetSelectedGameObject(null);
     }
 }
+

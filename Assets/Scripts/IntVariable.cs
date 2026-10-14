@@ -5,10 +5,20 @@ public class IntVariable : Variable<int>
 {
 
     public int previousHighestValue;
+
+    void OnEnable()
+    {
+        previousHighestValue = PlayerPrefs.GetInt("highscore", 0);
+    }
+
     public override void SetValue(int value)
     {
-        if (value > previousHighestValue) previousHighestValue = value;
-
+        if (value > previousHighestValue)
+        {
+            previousHighestValue = value;
+            PlayerPrefs.SetInt("highscore", previousHighestValue);
+            PlayerPrefs.Save();
+        }
         _value = value;
     }
 
@@ -31,6 +41,9 @@ public class IntVariable : Variable<int>
     public void ResetHighestValue()
     {
         previousHighestValue = 0;
+        PlayerPrefs.SetInt("highscore", 0);
+        PlayerPrefs.Save();
     }
+
 
 }

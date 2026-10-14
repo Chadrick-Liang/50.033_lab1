@@ -162,6 +162,8 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
     public void MoveCheck(int value)
     {
+        //preven mario from moving during pause
+        if (Time.timeScale == 0) return;
         if (value == 0)
         {
             moving = false;
@@ -181,6 +183,8 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
     public void Jump()
     {
+        //preven mario from jumping during pause
+        if (Time.timeScale == 0) return;
         if (alive && onGroundState)
         {
             // jump
@@ -320,6 +324,10 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
         marioAnimator.SetTrigger("gameRestart");
         alive = true;
+        var bgm = GameObject.Find("BGM");
+        if (bgm == null) bgm = GameObject.Find("BackgroundCanvas");
+        if (bgm != null) bgm.GetComponent<AudioSource>().Play();
+
 
         jumpOverGoomba.enabled = true;
 
@@ -345,6 +353,10 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     {
         if (!alive || isGameOver) return;
         marioAudio.Stop(); //prevent any leftover audio
+        var bgm = GameObject.Find("BGM");
+        if (bgm == null) bgm = GameObject.Find("BackgroundCanvas");
+        if (bgm != null) bgm.GetComponent<AudioSource>().Stop();
+
 
         alive = false;
 

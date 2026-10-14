@@ -8,7 +8,8 @@ public class LoadAndWait : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(Fade());
+        if (c != null)
+            StartCoroutine(Fade());
     }
 
     IEnumerator Fade()
@@ -26,6 +27,7 @@ public class LoadAndWait : MonoBehaviour
 
     public void ReturnToMain()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("MainMenu");
     }
 }
