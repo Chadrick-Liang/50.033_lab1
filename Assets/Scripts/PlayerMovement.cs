@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 {
     public float speed = 10;
     private Rigidbody2D marioBody;
@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     public int HistoryCount => positionHistory.Count;
     public bool IsRewinding => isRewinding;
     public bool IsGrounded => onGroundState;
+    public bool IsSuperMario { get; private set; }
+    private Vector3 normalScale;
 
     private bool isGameOver = false;
     private int collisionLayerMask = (1 << 3) | (1 << 6) | (1 << 7) | (1 << 8);
@@ -51,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        normalScale = transform.localScale;
         gameManager = GameManager.instance;
         gameManager.gameRestart.AddListener(GameRestart);
     }
@@ -269,10 +272,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void RequestPowerupEffect(IPowerup powerup)
+    {
+        if (alive && !isRewinding && !isGameOver)
+            powerup.ApplyPowerup(this);
+    }
+
+    public void BecomeSuperMario()
+    {
+        if (IsSuperMario) return;
+        IsSuperMario = true;
+        // Reuse the current artwork, keeping Mario's feet at the same height.
+        Collider2D bodyCollider = GetComponent<Collider2D>();
+        float feetY = bodyCollider != null ? bodyCollider.bounds.min.y : transform.position.y;
+        transform.localScale = new Vector3(normalScale.x, normalScale.y * 2f, normalScale.z);
+        if (bodyCollider != null)
+        {
+            Physics2D.SyncTransforms();
+            marioBody.position += Vector2.up * (feetY - bodyCollider.bounds.min.y);
+        }
+    }
+
     // subscribed to GameManager.gameRestart
     public void GameRestart()
     {
         isGameOver = false;
+        IsSuperMario = false;
+        transform.localScale = normalScale;
         // reset position
         marioBody.position = marioStartPosition;
         lastSafePosition = marioStartPosition;

@@ -21,18 +21,17 @@ public class QuestionBoxPowerupController : MonoBehaviour, IPowerupController
     private Rigidbody2D boxBody;
     private BoxCollider2D boxCollider;
     private AudioSource audioSource;
-    private Rigidbody2D powerupBody;
-    private SpriteRenderer powerupVisual;
 
     private Vector3 boxStartLocalPosition;
-    private Vector3 powerupStartLocalPosition;
     private bool used;
     private bool finishingBounce;
     private bool hasRisen;
     private float bounceElapsed;
 
     private Vector2 RestPosition =>
-        (Vector2)transform.parent.TransformPoint(boxStartLocalPosition);
+        transform.parent != null
+            ? (Vector2)transform.parent.TransformPoint(boxStartLocalPosition)
+            : (Vector2)boxStartLocalPosition;
 
     void Awake()
     {
@@ -41,13 +40,6 @@ public class QuestionBoxPowerupController : MonoBehaviour, IPowerupController
         audioSource = GetComponent<AudioSource>();
 
         boxStartLocalPosition = transform.localPosition;
-
-        if (powerup != null)
-        {
-            powerupBody = powerup.GetComponent<Rigidbody2D>();
-            powerupVisual = powerup.GetComponent<SpriteRenderer>();
-            powerupStartLocalPosition = powerup.transform.localPosition;
-        }
 
         ResetBox();
     }
@@ -168,27 +160,7 @@ public class QuestionBoxPowerupController : MonoBehaviour, IPowerupController
         }
 
         if (powerup != null)
-        {
-            powerup.spawned = false;
-            powerup.transform.localPosition = powerupStartLocalPosition;
-
-            if (powerupBody != null)
-            {
-                powerupBody.linearVelocity = Vector2.zero;
-                powerupBody.angularVelocity = 0f;
-                powerupBody.simulated = false;
-            }
-
-            if (powerupVisual != null)
-                powerupVisual.enabled = true;
-
-            if (powerupAnimator != null)
-            {
-                powerupAnimator.enabled = true;
-                powerupAnimator.Play("Hidden", 0, 0f);
-                powerupAnimator.Update(0f);
-            }
-        }
+            powerup.ResetPowerup();
 
         audioSource.Stop();
     }

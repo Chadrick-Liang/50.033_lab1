@@ -8,6 +8,40 @@ public abstract class BasePowerup : MonoBehaviour, IPowerup
     protected bool consumed = false;
     protected bool goRight = true;
     protected Rigidbody2D rigidBody;
+    private Vector3 startLocalPosition;
+    private bool initialized;
+
+    protected virtual void Awake()
+    {
+        InitializePowerup();
+    }
+
+    protected void InitializePowerup()
+    {
+        if (initialized) return;
+        initialized = true;
+        rigidBody = GetComponent<Rigidbody2D>();
+        startLocalPosition = transform.localPosition;
+    }
+
+    public virtual void ResetPowerup()
+    {
+        // A box can reset its child before that child's Awake has run.
+        InitializePowerup();
+        StopAllCoroutines();
+        spawned = false;
+        consumed = false;
+        goRight = true;
+        transform.localPosition = startLocalPosition;
+        if (rigidBody != null)
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.angularVelocity = 0f;
+            rigidBody.simulated = false;
+            rigidBody.position = transform.position;
+        }
+        gameObject.SetActive(true);
+    }
 
     // base methods
     protected virtual void Start()
@@ -33,7 +67,7 @@ public abstract class BasePowerup : MonoBehaviour, IPowerup
         }
     }
 
-    public void DestroyPowerup()
+    public virtual void DestroyPowerup()
     {
         Destroy(this.gameObject);
     }

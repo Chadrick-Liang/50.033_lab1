@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7880772715428526999}
   - component: {fileID: 894573644446528916}
+  - component: {fileID: 1638585538527534442}
   m_Layer: 8
   m_Name: Coin
   m_TagString: Untagged
@@ -91,6 +92,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1638585538527534442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947984089642515480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04bcaafbab8b4c54dadd8bd94e7a1a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoinPowerup
+  type: 0
+  spawned: 0
+  scoreValue: 1
+  coinHeight: 1.5
+  coinDuration: 0.45
 --- !u!1 &2387756424647657988
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +120,7 @@ GameObject:
   - component: {fileID: 5739871001711748958}
   - component: {fileID: 7268012648156840940}
   - component: {fileID: 4854584494355611473}
-  - component: {fileID: 5511622213236584480}
+  - component: {fileID: 1904761076173928712}
   m_Layer: 8
   m_Name: Brick_Grey
   m_TagString: Untagged
@@ -270,7 +288,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5511622213236584480
+--- !u!114 &1904761076173928712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,17 +297,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2387756424647657988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d9fb1a6e126b3540959584fe48127bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bc4786bf333ce24d87eb3bcb4b91c54, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BrickBlock
+  m_EditorClassIdentifier: Assembly-CSharp::BrickPowerupController
   visual: {fileID: 7553114033046613883}
-  coin: {fileID: 894573644446528916}
+  powerup: {fileID: 1638585538527534442}
   coinSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
   containsCoin: 0
+  breakableBySuperMario: 1
   bounceHeight: 0.2
   bounceDuration: 0.18
-  coinHeight: 1.5
-  coinDuration: 0.45
 --- !u!1 &5216088323876159259
 GameObject:
   m_ObjectHideFlags: 0

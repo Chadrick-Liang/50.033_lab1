@@ -4,9 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class MagicMushroomPowerup : BasePowerup
 {
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         type = PowerupType.MagicMushroom;
     }
 
@@ -15,11 +15,12 @@ public class MagicMushroomPowerup : BasePowerup
         if (!spawned || consumed)
             return;
 
-        if (collision.gameObject.CompareTag("Player"))
+        PlayerMovement player = collision.gameObject.GetComponentInParent<PlayerMovement>();
+        if (player != null)
         {
-            consumed = true;
-            ApplyPowerup(collision.gameObject.GetComponentInParent<MonoBehaviour>());
-            DestroyPowerup();
+            if (!player.alive || player.IsRewinding) return;
+            player.RequestPowerupEffect(this);
+            if (consumed) DestroyPowerup();
         }
         else if (collision.gameObject.layer == 10)
         {
@@ -50,6 +51,29 @@ public class MagicMushroomPowerup : BasePowerup
 
     public override void ApplyPowerup(MonoBehaviour recipient)
     {
-        // To do
+        if (!spawned || consumed || !(recipient is PlayerMovement player)) return;
+        if (!player.alive || player.IsRewinding) return;
+        consumed = true;
+        player.BecomeSuperMario();
+    }
+
+    public override void DestroyPowerup()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public override void ResetPowerup()
+    {
+        base.ResetPowerup();
+        type = PowerupType.MagicMushroom;
+        GetComponent<SpriteRenderer>().enabled = true;
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.enabled = true;
+            animator.ResetTrigger("spawned");
+            animator.Play("Hidden", 0, 0f);
+            animator.Update(0f);
+        }
     }
 }

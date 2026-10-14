@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 8557431151678009624}
   - component: {fileID: 4688498944584872802}
   - component: {fileID: 2668407242694715935}
-  - component: {fileID: 7277638222059272588}
+  - component: {fileID: 6629336893880257574}
   m_Layer: 8
   m_Name: question_block
   m_TagString: Untagged
@@ -503,7 +503,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7277638222059272588
+--- !u!114 &6629336893880257574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -512,19 +512,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3455981561819694096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d11396f694f8a43478a163f72fe8348d, type: 3}
+  m_Script: {fileID: 11500000, guid: c64ed3eaa2051f04b8d5b082f90e23e6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestionBlock
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionBoxPowerupController
   visual: {fileID: 6118625732893050790}
   boxAnimator: {fileID: 4688498944584872802}
   usedSprite: {fileID: 21300060, guid: 82bc45c4496284f4c823d1b837f65ec4, type: 3}
-  coin: {fileID: 7935430319777517061}
-  coinAnimator: {fileID: 6831755106301922000}
-  coinSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
+  powerupAnimator: {fileID: 0}
+  powerup: {fileID: 6860734977406519877}
+  powerupSound: {fileID: 8300000, guid: d885ffc842af744d89f7d595ffcc176a, type: 3}
   bounceSpeed: 4
   maximumBounceTime: 1
-  coinHeight: 1.5
-  coinDuration: 0.45
 --- !u!1 &5907080605942694724
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +534,7 @@ GameObject:
   - component: {fileID: 4644130854248826671}
   - component: {fileID: 7935430319777517061}
   - component: {fileID: 6831755106301922000}
-  - component: {fileID: 4819016550294614736}
+  - component: {fileID: 6860734977406519877}
   m_Layer: 8
   m_Name: coin
   m_TagString: Untagged
@@ -640,7 +638,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4819016550294614736
+--- !u!114 &6860734977406519877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -649,10 +647,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5907080605942694724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bd463fd5568d3b49ae56a4319d40a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 04bcaafbab8b4c54dadd8bd94e7a1a37, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventIntTool
-  parameter: 1
-  useInt:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::CoinPowerup
+  type: 0
+  spawned: 0
+  scoreValue: 1
+  coinHeight: 1.5
+  coinDuration: 0.45
