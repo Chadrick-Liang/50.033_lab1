@@ -365,7 +365,7 @@ public class LevelGenerator : MonoBehaviour
                         // parented under Enemies so EnemyManager.GameRestart() resets them
                         GameObject goomba = Instantiate(goombaPrefab, pos, Quaternion.identity, enemiesParent);
                         EnemyMovement movement = goomba.GetComponent<EnemyMovement>();
-                        movement.maxOffset = rules.maxOffset;
+                        movement.SetMaxOffset(rules.maxOffset);
                         break;
 
                 }

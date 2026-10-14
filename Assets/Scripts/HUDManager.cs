@@ -10,6 +10,8 @@ public class HUDManager : MonoBehaviour
     public GameObject gameOverPanel;
     public TextMeshProUGUI finalScoreText;
     public GameObject rewindPanel;
+    public GameObject highscoreText;
+    public IntVariable gameScore;
 
     private GameObject[] lifeSprites;
 
@@ -69,5 +71,9 @@ public class HUDManager : MonoBehaviour
     public void GameOver()
     {
         gameOverPanel.SetActive(true);
+        // set highscore
+        highscoreText.GetComponent<TextMeshProUGUI>().text = "TOP- " + gameScore.previousHighestValue.ToString("D6");
+        // show
+        highscoreText.SetActive(true);
     }
 }

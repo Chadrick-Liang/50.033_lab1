@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 {
-    public float speed = 10;
+    public GameConstants gameConstants;
+    private float speed;
     private Rigidbody2D marioBody;
-    public float maxSpeed = 20;
-    public float upSpeed = 20;
+    private float maxSpeed;
+    private float upSpeed;
     private bool onGroundState = true;
     private SpriteRenderer marioSprite;
     private bool faceRightState = true;
@@ -38,7 +39,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
     public AudioSource marioAudio;
     public AudioClip marioDeath;
-    public float deathImpulse = 15;
+    private float deathImpulse;
 
     public float stompBounce = 10; // upward speed Mario gets after squashing a goomba
     public float stompTolerance = 0.25f; // how far below the goomba's top Mario's centre can be and still count as a stomp
@@ -61,6 +62,11 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     // Start is called before the first frame update
     void Start()
     {
+        // Set constants
+        speed = gameConstants.speed;
+        maxSpeed = gameConstants.maxSpeed;
+        deathImpulse = gameConstants.deathImpulse;
+        upSpeed = gameConstants.upSpeed;
         if (duckAudio == null) duckAudio = marioAudio;
 
         marioSprite = GetComponent<SpriteRenderer>();
@@ -159,7 +165,9 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         if (value == 0)
         {
             moving = false;
-            marioBody.linearVelocity = Vector2.zero;
+            // Stop horizontal movement without cancelling a jump or fall
+            marioBody.linearVelocity =
+    new Vector2(0f, marioBody.linearVelocity.y);
         }
         else
         {

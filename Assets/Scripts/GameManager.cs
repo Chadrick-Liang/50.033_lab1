@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     // events
+    public GameConstants gameConstants;
+    public IntVariable gameScore;
     public UnityEvent gameStart;
     public UnityEvent gameRestart;
     public UnityEvent<int> scoreChange;
@@ -16,23 +18,21 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent rewindStart;
     public UnityEvent rewindEnd;
 
-    private int score = 0;
-
-    public int maxRewinds = 2;
     private int livesLeft;
 
     void Start()
     {
+        gameScore.Value = 0;
         gameStart.Invoke();
         Time.timeScale = 1.0f;
-        SetLives(maxRewinds);
+        SetLives(gameConstants.maxRewinds);
         SceneManager.activeSceneChanged += SceneSetup;
     }
 
     public void SceneSetup(Scene current, Scene next)
     {
         gameStart.Invoke();
-        SetScore(score);
+        SetScore(gameScore.Value);
     }
 
     // Update is called once per frame
@@ -44,10 +44,10 @@ public class GameManager : Singleton<GameManager>
     public void GameRestart()
     {
         // reset score
-        score = 0;
-        SetScore(score);
+        gameScore.Value = 0;
+        SetScore(gameScore.Value);
         // reset rewind lives
-        SetLives(maxRewinds);
+        SetLives(gameConstants.maxRewinds);
         gameRestart.Invoke();
         Time.timeScale = 1.0f;
 
@@ -57,8 +57,8 @@ public class GameManager : Singleton<GameManager>
 
     public void IncreaseScore(int increment)
     {
-        score += increment;
-        SetScore(score);
+        gameScore.ApplyChange(increment);
+        SetScore(gameScore.Value);
     }
 
     public void SetScore(int score)

@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public GameConstants gameConstants;
 
     private float originalX;
-    public float maxOffset = 2.0f; // patrol distance each way
+    private float maxOffset; // patrol distance each way
+    private bool hasMaxOffsetOverride;
 
     public bool turnAtObstacles = false;
     public LayerMask obstacleLayers;
-    private float enemyPatroltime = 2.0f;
+    private float enemyPatrolTime;
     private int moveRight = -1;
     private Vector2 velocity;
 
@@ -46,6 +48,9 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        if (!hasMaxOffsetOverride)
+            maxOffset = gameConstants.goombaMaxOffset;
+        enemyPatrolTime = gameConstants.goombaPatrolTime;
         enemyBody = GetComponent<Rigidbody2D>();
         enemyCollider = GetComponent<Collider2D>();
         if (enemyAnimator == null) enemyAnimator = GetComponent<Animator>();
@@ -60,9 +65,15 @@ public class EnemyMovement : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
     }
+
+    public void SetMaxOffset(float value)
+    {
+        maxOffset = value;
+        hasMaxOffsetOverride = true;
+    }
     void ComputeVelocity()
     {
-        velocity = new Vector2((moveRight) * maxOffset / enemyPatroltime, 0);
+        velocity = new Vector2((moveRight) * maxOffset / enemyPatrolTime, 0);
     }
     void Movegoomba()
     {

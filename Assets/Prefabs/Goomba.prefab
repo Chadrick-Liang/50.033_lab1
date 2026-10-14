@@ -181,7 +181,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac20743cda04a2748a3dc3876efb6862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  maxOffset: 2
+  gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
+  turnAtObstacles: 0
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
   startPosition: {x: 0, y: 0, z: 0}
   enemyAnimator: {fileID: 0}
   dieDuration: 0.6
