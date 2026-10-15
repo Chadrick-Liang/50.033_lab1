@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "50.003_lab4.sln"
+    "dotnet.defaultSolution": "50.033_lab1.sln"
 }
