@@ -1,10 +1,17 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class RestartButtonController : MonoBehaviour, IInteractiveButton
+public class RestartButtonController : MonoBehaviour
 {
-    public void ButtonClick()
+
+    public UnityEvent gameRestart;
+
+    void ButtonClick()
     {
-        Debug.Log("OnClick restart button");
-        GameManager.instance.GameRestart();
+        gameRestart.Invoke();
     }
+
+
+
 }
+
