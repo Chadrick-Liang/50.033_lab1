@@ -14,7 +14,10 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     private SpriteRenderer marioSprite;
     private bool faceRightState = true;
 
-    GameManager gameManager;
+    // shared with GameManager, which refills it on new game / restart
+    public IntVariable gameLives;
+    // link to OnUpdateLives's Raise (Dynamic int) in the Inspector
+    public UnityEvent<int> livesChange;
 
     private Vector2 marioStartPosition;
     private Vector2 lastSafePosition; // last place Mario landed on something solid, respawn point after falling into a pit
@@ -65,7 +68,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     void Awake()
     {
         normalScale = transform.localScale;
-        gameManager = GameManager.instance;
     }
 
     // Start is called before the first frame update
@@ -233,7 +235,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         // fell into a pit: lose a life and respawn on the last ground Mario landed on
         if (other.gameObject.CompareTag("DeathZone"))
         {
-            if (gameManager.UseLife()) //if there are lives left
+            if (UseLife()) //if there are lives left
             {
                 duckAudio.PlayOneShot(marioRewind);
                 RewindTo(lastSafePosition); // also clears velocity so he doesn't keep falling
@@ -259,7 +261,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
                 return;
             }
 
-            if (gameManager.UseLife()) //if there are lives left
+            if (UseLife()) //if there are lives left
             {
                 duckAudio.PlayOneShot(marioRewind);
                 StartRewind();
@@ -269,6 +271,15 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
                 BeginDeath();
             }
         }
+    }
+
+    // takes a life if there is one left, returns false when Mario is out of lives
+    private bool UseLife()
+    {
+        if (gameLives.Value <= 0) return false;
+        gameLives.ApplyChange(-1);
+        livesChange.Invoke(gameLives.Value);
+        return true;
     }
 
     // moves Mario to a stored position, used by the rewind coroutine and pit respawn
@@ -325,6 +336,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         rewindEnd.Invoke(); // goombas resume patrolling, HUD hides the rewind panel
     }
 
+    // listens to OnPowerupAffectsPlayer
     public void RequestPowerupEffect(IPowerup powerup)
     {
         if (alive && !isRewinding && !isGameOver)

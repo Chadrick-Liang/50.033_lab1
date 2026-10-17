@@ -4,16 +4,19 @@ using UnityEngine;
 public class IntVariable : Variable<int>
 {
 
+    // only GameScore saves a highscore, other IntVariables (e.g. GameLives) must leave PlayerPrefs alone
+    public bool persistHighscore = false;
     public int previousHighestValue;
 
     void OnEnable()
     {
-        previousHighestValue = PlayerPrefs.GetInt("highscore", 0);
+        if (persistHighscore)
+            previousHighestValue = PlayerPrefs.GetInt("highscore", 0);
     }
 
     public override void SetValue(int value)
     {
-        if (value > previousHighestValue)
+        if (persistHighscore && value > previousHighestValue)
         {
             previousHighestValue = value;
             PlayerPrefs.SetInt("highscore", previousHighestValue);

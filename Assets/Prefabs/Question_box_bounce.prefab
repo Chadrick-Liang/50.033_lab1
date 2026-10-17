@@ -652,6 +652,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinPowerup
   type: 0
   spawned: 0
+  powerupCollected:
+    m_PersistentCalls:
+      m_Calls: []
   scoreValue: 1
   coinHeight: 1.5
   coinDuration: 0.45

@@ -20,11 +20,9 @@ public class HUDManager : MonoBehaviour
         lifeSprites = GameObject.FindGameObjectsWithTag("Life")
             .OrderBy(go => go.name)
             .ToArray();
-
-        GameManager.instance.gameStart.AddListener(GameStart);
-        GameManager.instance.livesChange.AddListener(SetLives);
     }
 
+    // listens to OnGameStart
     public void GameStart()
     {
         // hide gameover panel
@@ -32,18 +30,21 @@ public class HUDManager : MonoBehaviour
         rewindPanel.SetActive(false); // only shown while the rewind animation plays
     }
 
+    // listens to OnGameRestart
     public void GameRestart()
     {
         gameOverPanel.SetActive(false);
         rewindPanel.SetActive(false);
     }
 
+    // listens to OnUpdateScore
     public void SetScore(int score)
     {
         scoreText.text = "Score: " + score.ToString();
         finalScoreText.text = "Score: " + score.ToString();
     }
 
+    // listens to OnUpdateLives
     public void SetLives(int lives)
     {
         // hide used lives from the front, so Life1 disappears first
@@ -53,16 +54,19 @@ public class HUDManager : MonoBehaviour
         }
     }
 
+    // listens to OnRewindStart
     public void ShowRewindPanel()
     {
         rewindPanel.SetActive(true);
     }
 
+    // listens to OnRewindEnd
     public void HideRewindPanel()
     {
         rewindPanel.SetActive(false);
     }
 
+    // listens to OnGameOver
     public void GameOver()
     {
         gameOverPanel.SetActive(true);

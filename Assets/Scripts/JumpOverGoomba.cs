@@ -1,20 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class JumpOverGoomba : MonoBehaviour
 {
-    GameManager gameManager;
+    // link to OnIncrementScore's Raise (Dynamic int) in the Inspector
+    public UnityEvent<int> incrementScore;
 
-    void Start()
-    {
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
-    }
-
-    // called by each goomba's EnemyMovement when Mario jumps over it
     public void AddScore()
     {
-        if (!enabled) return; // disabled by PlayerMovement while Mario is dead
-        gameManager.IncreaseScore(1);
+        if (!enabled) return;
+        incrementScore.Invoke(1);
     }
 }

@@ -45,7 +45,7 @@ public class CoinPowerup : BasePowerup
         }
 
         transform.localPosition = startPosition;
-        ApplyPowerup(GameManager.instance);
+        powerupCollected.Invoke(this); // PowerupManager routes it to GameManager's RequestPowerupEffect
         DestroyPowerup();
     }
 

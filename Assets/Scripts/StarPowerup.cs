@@ -19,7 +19,7 @@ public class StarPowerup : BasePowerup
         if (player != null)
         {
             if (!player.alive || player.IsRewinding) return;
-            player.RequestPowerupEffect(this);
+            powerupCollected.Invoke(this); // PowerupManager routes it back to Mario's RequestPowerupEffect
             if (consumed) DestroyPowerup();
         }
         else if (collision.gameObject.layer == 10)

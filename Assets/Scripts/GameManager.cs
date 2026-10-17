@@ -3,38 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>
+// one per scene, score and lives live in IntVariable assets so they carry over between scenes
+public class GameManager : MonoBehaviour, IPowerupApplicable
 {
-    // events
     public GameConstants gameConstants;
     public IntVariable gameScore;
-    public UnityEvent gameStart;
-    public UnityEvent<int> scoreChange; // link to OnUpdateScore's Raise (Dynamic int) in the Inspector
-    public UnityEvent<int> livesChange;
+    public IntVariable gameLives;
+    // tick in the first level only, later levels keep the score and lives from the previous scene
+    public bool newGameOnStart = true;
 
-    private int livesLeft;
+    // events, link each to the matching GameEvent's Raise in the Inspector
+    public UnityEvent gameStart; // OnGameStart
+    public UnityEvent<int> scoreChange; // OnUpdateScore (Dynamic int)
+    public UnityEvent<int> livesChange; // OnUpdateLives (Dynamic int)
 
     void Start()
     {
-        gameScore.Value = 0;
+        if (newGameOnStart)
+        {
+            gameScore.Value = 0;
+            gameLives.Value = gameConstants.maxRewinds;
+        }
         gameStart.Invoke();
         Time.timeScale = 1.0f;
-        SetLives(gameConstants.maxRewinds);
-        SceneManager.activeSceneChanged += SceneSetup;
-    }
-
-    public void SceneSetup(Scene current, Scene next)
-    {
-        gameStart.Invoke();
         SetScore(gameScore.Value);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        SetLives(gameLives.Value);
     }
 
     // listens to OnGameRestart
@@ -44,7 +38,8 @@ public class GameManager : Singleton<GameManager>
         gameScore.Value = 0;
         SetScore(gameScore.Value);
         // reset rewind lives
-        SetLives(gameConstants.maxRewinds);
+        gameLives.Value = gameConstants.maxRewinds;
+        SetLives(gameLives.Value);
         Time.timeScale = 1.0f;
 
         //deselect UI button so that keyboard can be used without accidentally triggering it again
@@ -63,18 +58,15 @@ public class GameManager : Singleton<GameManager>
         scoreChange.Invoke(score);
     }
 
-    // called by PlayerMovement when Mario gets hit, returns false if there are no lives left
-    public bool UseLife()
-    {
-        if (livesLeft <= 0) return false;
-        SetLives(livesLeft - 1);
-        return true;
-    }
-
     private void SetLives(int lives)
     {
-        livesLeft = lives;
-        livesChange.Invoke(livesLeft);
+        livesChange.Invoke(lives);
+    }
+
+    // listens to OnPowerupAffectsManager
+    public void RequestPowerupEffect(IPowerup powerup)
+    {
+        powerup.ApplyPowerup(this);
     }
 
     // listens to OnGameOver

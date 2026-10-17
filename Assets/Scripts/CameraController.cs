@@ -18,7 +18,6 @@ public class CameraController : MonoBehaviour
 
     void Awake()
     {
-        //GameManager.instance.gameRestart.AddListener(ResetCamera);
     }
 
     void Start()

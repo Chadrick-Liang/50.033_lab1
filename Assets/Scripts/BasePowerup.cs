@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public abstract class BasePowerup : MonoBehaviour, IPowerup
@@ -10,6 +11,9 @@ public abstract class BasePowerup : MonoBehaviour, IPowerup
     protected Rigidbody2D rigidBody;
     private Vector3 startLocalPosition;
     private bool initialized;
+
+    // raised when this powerup is collected, link to OnPowerupCollected's Raise (Dynamic IPowerup) in the Inspector
+    public UnityEvent<IPowerup> powerupCollected;
 
     protected virtual void Awake()
     {
