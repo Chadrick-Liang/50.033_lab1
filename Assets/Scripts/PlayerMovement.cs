@@ -19,8 +19,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     private Vector2 marioStartPosition;
     private Vector2 lastSafePosition; // last place Mario landed on something solid, respawn point after falling into a pit
 
-    public JumpOverGoomba jumpOverGoomba;
-
     private bool isRewinding = false;
 
     // Mario's position every physics step, oldest first, played back by the rewind coroutine
@@ -37,6 +35,9 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     public UnityEvent rewindStart;
     public UnityEvent rewindStep;
     public UnityEvent rewindEnd;
+
+    // link to OnGameOver's Raise in the Inspector
+    public UnityEvent gameOver;
     public bool IsGrounded => onGroundState;
     public bool IsSuperMario { get; private set; }
     private Vector3 normalScale;
@@ -65,7 +66,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     {
         normalScale = transform.localScale;
         gameManager = GameManager.instance;
-        gameManager.gameRestart.AddListener(GameRestart);
     }
 
     // Start is called before the first frame update
@@ -346,7 +346,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         }
     }
 
-    // subscribed to GameManager.gameRestart
+    // listens to OnGameRestart
     public void GameRestart()
     {
         isGameOver = false;
@@ -368,10 +368,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         var bgm = GameObject.Find("BGM");
         if (bgm == null) bgm = GameObject.Find("BackgroundCanvas");
         if (bgm != null) bgm.GetComponent<AudioSource>().Play();
-
-
-        jumpOverGoomba.enabled = true;
-
 
         onGroundState = true; // Assuming Mario restarts on the ground
         marioAnimator.SetBool("onGround", onGroundState);
@@ -405,8 +401,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;
 
-        jumpOverGoomba.enabled = false;
-
         marioAnimator.Play("mario-die", 0, 0f);
         duckAudio.PlayOneShot(marioDeath);
     }
@@ -416,6 +410,6 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         if (alive || isGameOver) return;
 
         isGameOver = true;
-        gameManager.GameOver();
+        gameOver.Invoke();
     }
 }

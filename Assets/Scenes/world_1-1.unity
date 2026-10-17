@@ -313,6 +313,30 @@ PrefabInstance:
       propertyPath: rewindPanel
       value: 
       objectReference: {fileID: 156432853}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: f53c40cd8ab350f4fa576990a88e81e9, type: 2}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: IntGameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5208457224170438220, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
       propertyPath: m_Name
       value: Goomba3
@@ -573,6 +597,30 @@ PrefabInstance:
       propertyPath: rewindPanel
       value: 
       objectReference: {fileID: 156432853}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: f53c40cd8ab350f4fa576990a88e81e9, type: 2}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: IntGameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5208457224170438220, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
       propertyPath: m_Name
       value: Goomba2
@@ -3509,7 +3557,6 @@ GameObject:
   - component: {fileID: 1595828812}
   - component: {fileID: 1595828811}
   - component: {fileID: 1595828815}
-  - component: {fileID: 1595828816}
   - component: {fileID: 1595828818}
   - component: {fileID: 1595828817}
   - component: {fileID: 1595828820}
@@ -3536,7 +3583,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
-  jumpOverGoomba: {fileID: 1595828816}
   rewindDuration: 3
   rewindStart:
     m_PersistentCalls:
@@ -3572,6 +3618,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 0a3a3b3de407b5a4cab12547a5436cc6, type: 2}
+        m_TargetAssemblyTypeName: SimpleGameEvent, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  gameOver:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 5d60d8467936fc146bf37fa3336c232c, type: 2}
         m_TargetAssemblyTypeName: SimpleGameEvent, Assembly-CSharp
         m_MethodName: Raise
         m_Mode: 1
@@ -3737,18 +3798,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0.05
---- !u!114 &1595828816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1595828810}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e969d37967ebd64f9fa83c4c31e6f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpOverGoomba
 --- !u!82 &1595828817
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4316,6 +4365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666320687}
   - component: {fileID: 1666320688}
+  - component: {fileID: 1666320689}
   m_Layer: 7
   m_Name: Enemies
   m_TagString: Untagged
@@ -4353,6 +4403,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0044693669a93d74eb1a1ee948c67798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+--- !u!114 &1666320689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666320686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 903694d47f70b574ab34b67528511814, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1666320688}
+        m_TargetAssemblyTypeName: EnemyManager, Assembly-CSharp
+        m_MethodName: GameRestart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1675708168
 GameObject:
   m_ObjectHideFlags: 0
@@ -4720,7 +4798,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ButtonController
   gameRestart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 903694d47f70b574ab34b67528511814, type: 2}
+        m_TargetAssemblyTypeName: SimpleGameEvent, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1769945896
 GameObject:
   m_ObjectHideFlags: 0
@@ -5780,6 +5870,11 @@ GameObject:
   - component: {fileID: 2080831889}
   - component: {fileID: 2080831888}
   - component: {fileID: 2080831892}
+  - component: {fileID: 2080831894}
+  - component: {fileID: 2080831893}
+  - component: {fileID: 2080831895}
+  - component: {fileID: 2080831897}
+  - component: {fileID: 2080831896}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5894,6 +5989,146 @@ MonoBehaviour:
   rewindPanel: {fileID: 156432853}
   highscoreText: {fileID: 2037395918}
   gameScore: {fileID: 11400000, guid: c68cd2d5329870d4b8daf6d00bae4e01, type: 2}
+--- !u!114 &2080831893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 0a3a3b3de407b5a4cab12547a5436cc6, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2080831892}
+        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
+        m_MethodName: HideRewindPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2080831894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: e4d9b6e1870539b49815ecec215e301a, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2080831892}
+        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
+        m_MethodName: ShowRewindPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2080831895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f577aca29cbbd634aacb7f37462f9963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IntGameEventListener
+  Event: {fileID: 11400000, guid: 3b1b8952654550646bf5f8631ef8cbe0, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2080831892}
+        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
+        m_MethodName: SetScore
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2080831896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 5d60d8467936fc146bf37fa3336c232c, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2080831892}
+        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
+        m_MethodName: GameOver
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2080831897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080831887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 903694d47f70b574ab34b67528511814, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2080831892}
+        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
+        m_MethodName: GameRestart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2119185622
 GameObject:
   m_ObjectHideFlags: 0
@@ -5904,6 +6139,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2119185625}
   - component: {fileID: 2119185623}
+  - component: {fileID: 2119185626}
+  - component: {fileID: 2119185627}
+  - component: {fileID: 2119185628}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Manager
@@ -5928,22 +6166,22 @@ MonoBehaviour:
   gameStart:
     m_PersistentCalls:
       m_Calls: []
-  gameRestart:
-    m_PersistentCalls:
-      m_Calls: []
   scoreChange:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 3b1b8952654550646bf5f8631ef8cbe0, type: 2}
+        m_TargetAssemblyTypeName: IntGameEvent, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   livesChange:
-    m_PersistentCalls:
-      m_Calls: []
-  gameOver:
-    m_PersistentCalls:
-      m_Calls: []
-  rewindStart:
-    m_PersistentCalls:
-      m_Calls: []
-  rewindEnd:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &2119185625
@@ -5961,6 +6199,90 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2119185626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119185622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f577aca29cbbd634aacb7f37462f9963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IntGameEventListener
+  Event: {fileID: 11400000, guid: f53c40cd8ab350f4fa576990a88e81e9, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2119185623}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: IncreaseScore
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2119185627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119185622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 903694d47f70b574ab34b67528511814, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2119185623}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GameRestart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2119185628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119185622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f6c3bd24412b34dafd098d628f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEventListener
+  Event: {fileID: 11400000, guid: 5d60d8467936fc146bf37fa3336c232c, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2119185623}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GameOver
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2136240788
 GameObject:
   m_ObjectHideFlags: 0
@@ -6165,6 +6487,30 @@ PrefabInstance:
       propertyPath: rewindPanel
       value: 
       objectReference: {fileID: 156432853}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: f53c40cd8ab350f4fa576990a88e81e9, type: 2}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: IntGameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203216314426110663, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
+      propertyPath: stomped.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5208457224170438220, guid: e9cdf328355ebc8459c04203a1805bb4, type: 3}
       propertyPath: m_Name
       value: Goomba

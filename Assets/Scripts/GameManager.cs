@@ -11,10 +11,8 @@ public class GameManager : Singleton<GameManager>
     public GameConstants gameConstants;
     public IntVariable gameScore;
     public UnityEvent gameStart;
-    public UnityEvent gameRestart;
-    public UnityEvent<int> scoreChange;
+    public UnityEvent<int> scoreChange; // link to OnUpdateScore's Raise (Dynamic int) in the Inspector
     public UnityEvent<int> livesChange;
-    public UnityEvent gameOver;
 
     private int livesLeft;
 
@@ -39,6 +37,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    // listens to OnGameRestart
     public void GameRestart()
     {
         // reset score
@@ -46,13 +45,13 @@ public class GameManager : Singleton<GameManager>
         SetScore(gameScore.Value);
         // reset rewind lives
         SetLives(gameConstants.maxRewinds);
-        gameRestart.Invoke();
         Time.timeScale = 1.0f;
 
         //deselect UI button so that keyboard can be used without accidentally triggering it again
         EventSystem.current.SetSelectedGameObject(null);
     }
 
+    // listens to OnIncrementScore
     public void IncreaseScore(int increment)
     {
         gameScore.ApplyChange(increment);
@@ -78,9 +77,9 @@ public class GameManager : Singleton<GameManager>
         livesChange.Invoke(livesLeft);
     }
 
+    // listens to OnGameOver
     public void GameOver()
     {
         Time.timeScale = 0.0f;
-        gameOver.Invoke();
     }
 }

@@ -44,18 +44,6 @@ public class QuestionBoxPowerupController : MonoBehaviour, IPowerupController
         ResetBox();
     }
 
-    void Start()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.gameRestart.AddListener(ResetBox);
-    }
-
-    void OnDestroy()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.gameRestart.RemoveListener(ResetBox);
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (!enabled || used || powerup == null || powerup.hasSpawned)
@@ -138,6 +126,7 @@ public class QuestionBoxPowerupController : MonoBehaviour, IPowerupController
         boxBody.bodyType = RigidbodyType2D.Static;
     }
 
+    // listens to OnGameRestart
     public void ResetBox()
     {
         StopAllCoroutines();

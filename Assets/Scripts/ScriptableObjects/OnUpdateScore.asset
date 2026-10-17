@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9979c4d4cea507440982870d7a8d58bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 22a42496184866f47b93ec88ed1a449c, type: 3}
   m_Name: OnUpdateScore
-  m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEvent
+  m_EditorClassIdentifier: Assembly-CSharp::IntGameEvent

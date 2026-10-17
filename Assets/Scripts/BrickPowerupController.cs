@@ -18,7 +18,6 @@ public class BrickPowerupController : MonoBehaviour, IPowerupController
 
     private AudioSource audioSource;
     private BoxCollider2D brickCollider;
-    private GameManager gameManager;
     private Vector3 visualStartPosition;
     private bool bouncing;
     private bool contentsAvailable;
@@ -30,17 +29,6 @@ public class BrickPowerupController : MonoBehaviour, IPowerupController
         brickCollider = GetComponent<BoxCollider2D>();
         visualStartPosition = visual.localPosition;
         ResetBlock();
-    }
-
-    private void Start()
-    {
-        gameManager = GameManager.instance;
-        if (gameManager != null) gameManager.gameRestart.AddListener(ResetBlock);
-    }
-
-    private void OnDestroy()
-    {
-        if (gameManager != null) gameManager.gameRestart.RemoveListener(ResetBlock);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -99,6 +87,7 @@ public class BrickPowerupController : MonoBehaviour, IPowerupController
         contentsAvailable = false;
     }
 
+    // listens to OnGameRestart
     public void ResetBlock()
     {
         StopAllCoroutines();

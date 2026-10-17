@@ -6,7 +6,7 @@ public class RestartButtonController : MonoBehaviour
 
     public UnityEvent gameRestart;
 
-    void ButtonClick()
+    public void ButtonClick()
     {
         gameRestart.Invoke();
     }

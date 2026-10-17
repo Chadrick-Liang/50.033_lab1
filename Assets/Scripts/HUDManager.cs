@@ -22,10 +22,7 @@ public class HUDManager : MonoBehaviour
             .ToArray();
 
         GameManager.instance.gameStart.AddListener(GameStart);
-        GameManager.instance.gameRestart.AddListener(GameRestart);
-        GameManager.instance.scoreChange.AddListener(SetScore);
         GameManager.instance.livesChange.AddListener(SetLives);
-        GameManager.instance.gameOver.AddListener(GameOver);
     }
 
     public void GameStart()

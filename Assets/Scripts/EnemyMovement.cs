@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -37,6 +38,10 @@ public class EnemyMovement : MonoBehaviour
     // AudioSource on this goomba, set its Output to the mixer's Enemies group
     public AudioSource enemyAudio;
     public AudioClip stompClip;
+
+    // raised when Mario stomps this goomba, link to OnIncrementScore's Raise (Dynamic int) in the Inspector
+    public int stompScore = 1;
+    public UnityEvent<int> stomped;
 
     private Collider2D enemyCollider;
     private bool isDead = false;
@@ -141,7 +146,7 @@ public class EnemyMovement : MonoBehaviour
         enemyCollider.enabled = false; // so the squashed goomba can't hurt Mario
         enemyAnimator.Play(dieState, 0, 0f);
         if (enemyAudio != null && stompClip != null) enemyAudio.PlayOneShot(stompClip);
-        playerMovement.jumpOverGoomba.AddScore();
+        stomped.Invoke(stompScore);
         StartCoroutine(DisappearAfterDeath());
     }
 

@@ -10,17 +10,13 @@ public class EnemyManager : MonoBehaviour
 
     }
 
-    void Awake()
-    {
-        GameManager.instance.gameRestart.AddListener(GameRestart);
-    }
-
     // Update is called once per frame
     void Update()
     {
 
     }
 
+    // listens to OnGameRestart, sits on the always-active Enemies parent so stomped (inactive) goombas still get revived
     public void GameRestart()
     {
         foreach (Transform child in transform)
