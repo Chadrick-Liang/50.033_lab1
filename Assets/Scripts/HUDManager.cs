@@ -26,8 +26,6 @@ public class HUDManager : MonoBehaviour
         GameManager.instance.scoreChange.AddListener(SetScore);
         GameManager.instance.livesChange.AddListener(SetLives);
         GameManager.instance.gameOver.AddListener(GameOver);
-        GameManager.instance.rewindStart.AddListener(ShowRewindPanel);
-        GameManager.instance.rewindEnd.AddListener(HideRewindPanel);
     }
 
     public void GameStart()

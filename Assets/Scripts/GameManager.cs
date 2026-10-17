@@ -15,8 +15,6 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent<int> scoreChange;
     public UnityEvent<int> livesChange;
     public UnityEvent gameOver;
-    public UnityEvent rewindStart;
-    public UnityEvent rewindEnd;
 
     private int livesLeft;
 
@@ -78,17 +76,6 @@ public class GameManager : Singleton<GameManager>
     {
         livesLeft = lives;
         livesChange.Invoke(livesLeft);
-    }
-
-    // called by EnemyMovement when the rewind animation starts and finishes
-    public void RewindStart()
-    {
-        rewindStart.Invoke();
-    }
-
-    public void RewindEnd()
-    {
-        rewindEnd.Invoke();
     }
 
     public void GameOver()

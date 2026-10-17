@@ -23,13 +23,9 @@ public class EnemyMovement : MonoBehaviour
     private Transform player;
     private PlayerMovement playerMovement;
 
-    // how many recorded steps to go back per physics step, 1 = real time (3s rewind takes 3s), 1.5 = 3s rewind takes 2s
-    private const float rewindPlaybackSpeed = 1.5f;
-
     // this goomba's position every physics step, oldest first, trimmed to PlayerMovement.rewindDuration
     private List<Vector2> history = new List<Vector2>();
     private bool isRewinding = false;
-    private GameManager gameManager;
 
     public Animator enemyAnimator;
 
@@ -63,7 +59,6 @@ public class EnemyMovement : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform; //get mario's game object to detect collision
         playerMovement = player.GetComponent<PlayerMovement>();
-        gameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<GameManager>();
     }
 
     public void SetMaxOffset(float value)
@@ -189,56 +184,21 @@ public class EnemyMovement : MonoBehaviour
         history.Clear();
     }
 
-    // rewind mechanic (playback function), called by PlayerMovement on the goomba Mario touched
-    public void Rewind(PlayerMovement playerMovement)
+    // rewind mechanic, called through the OnRewindStart / OnRewindStep / OnRewindEnd GameEventListeners on this goomba
+    public void BeginRewind()
     {
-        //will not rewind if nothing is recorded or a rewind is already playing
-        if (playerMovement.HistoryCount == 0 || playerMovement.IsRewinding) return;
-
-        //we use a corountine here (a type of unity object that allows a function to run over multiple frames)
-        //normally, unity renders frames after executing finish scripts
-        StartCoroutine(RewindCoroutine(playerMovement));
-    }
-
-    // rewind mechanic (per frame)
-    private IEnumerator RewindCoroutine(PlayerMovement playerMovement)
-    {
-        // rewind every goomba, not just this one, so the others don't walk into Mario's rewound position
-        EnemyMovement[] enemies = FindObjectsByType<EnemyMovement>(FindObjectsSortMode.None);
-
-        //set bool to prevent user action during animation
-        foreach (EnemyMovement enemy in enemies) enemy.isRewinding = true;
-        playerMovement.SetRewinding(true);
-        gameManager.RewindStart();
-
-        //play back the recorded steps newest to oldest until Mario's history (3s) runs out
-        float stepsToPlay = 0f;
-        while (playerMovement.HistoryCount > 0)
-        {
-            stepsToPlay += rewindPlaybackSpeed; // fractional speeds carry over to the next step
-            while (stepsToPlay >= 1f && playerMovement.HistoryCount > 0)
-            {
-                stepsToPlay -= 1f;
-                playerMovement.RewindTo(playerMovement.PopHistory());
-                foreach (EnemyMovement enemy in enemies) enemy.StepBack();
-            }
-            yield return new WaitForFixedUpdate();
-        }
-
-        foreach (EnemyMovement enemy in enemies) enemy.EndRewind();
-        playerMovement.SetRewinding(false);
-        gameManager.RewindEnd();
+        isRewinding = true; // frozen while Mario's rewind coroutine plays
     }
 
     // move to the newest recorded position and forget it
-    private void StepBack()
+    public void StepBack()
     {
         if (history.Count == 0) return;
         enemyBody.position = history[history.Count - 1];
         history.RemoveAt(history.Count - 1);
     }
 
-    private void EndRewind()
+    public void EndRewind()
     {
         isRewinding = false;
     }

@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9979c4d4cea507440982870d7a8d58bb, type: 3}
-  m_Name: OnGameRewind
+  m_Name: OnRewindEnd
   m_EditorClassIdentifier: Assembly-CSharp::SimpleGameEvent

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 {
@@ -22,12 +23,20 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
     private bool isRewinding = false;
 
-    // Mario's position every physics step, oldest first, played back by EnemyMovement's rewind coroutine
+    // Mario's position every physics step, oldest first, played back by the rewind coroutine
     public float rewindDuration = 3.0f;
     private List<Vector2> positionHistory = new List<Vector2>();
     public int MaxHistoryCount => Mathf.RoundToInt(rewindDuration / Time.fixedDeltaTime);
     public int HistoryCount => positionHistory.Count;
     public bool IsRewinding => isRewinding;
+
+    // how many recorded steps to go back per physics step, 1 = real time (3s rewind takes 3s), 1.5 = 3s rewind takes 2s
+    private const float rewindPlaybackSpeed = 1.5f;
+
+    // rewind events, link each one to the matching GameEvent's Raise() in the Inspector
+    public UnityEvent rewindStart;
+    public UnityEvent rewindStep;
+    public UnityEvent rewindEnd;
     public bool IsGrounded => onGroundState;
     public bool IsSuperMario { get; private set; }
     private Vector3 normalScale;
@@ -136,7 +145,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     // FixedUpdate is called 50 times a second
     void FixedUpdate()
     {
-        if (isRewinding || isGameOver || !alive) return; // position is driven by EnemyMovement's rewind coroutine instead
+        if (isRewinding || isGameOver || !alive) return; // position is driven by the rewind coroutine instead
 
         if (alive && moving)
         {
@@ -253,10 +262,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
             if (gameManager.UseLife()) //if there are lives left
             {
                 duckAudio.PlayOneShot(marioRewind);
-                if (enemyMovement != null)
-                {
-                    enemyMovement.Rewind(this); //call rewind function
-                }
+                StartRewind();
             }
             else
             {
@@ -265,7 +271,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         }
     }
 
-    // called by EnemyMovement to rewind the player back to a stored position
+    // moves Mario to a stored position, used by the rewind coroutine and pit respawn
     public void RewindTo(Vector2 position)
     {
         marioBody.position = position;
@@ -273,7 +279,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         marioBody.angularVelocity = 0;
     }
 
-    // called by EnemyMovement to freeze/unfreeze player control while the rewind animation plays
+    // freeze/unfreeze player control while the rewind animation plays
     public void SetRewinding(bool rewinding)
     {
         isRewinding = rewinding;
@@ -282,6 +288,41 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
             marioBody.linearVelocity = Vector2.zero;
             marioBody.angularVelocity = 0;
         }
+    }
+
+    // rewind mechanic (playback function), Mario owns the history so he drives the rewind and raises events for everyone else
+    private void StartRewind()
+    {
+        //will not rewind if nothing is recorded or a rewind is already playing
+        if (positionHistory.Count == 0 || isRewinding) return;
+
+        //we use a corountine here (a type of unity object that allows a function to run over multiple frames)
+        StartCoroutine(RewindCoroutine());
+    }
+
+    // rewind mechanic (per frame)
+    private IEnumerator RewindCoroutine()
+    {
+        //set bool to prevent user action during animation
+        SetRewinding(true);
+        rewindStart.Invoke(); // goombas freeze, HUD shows the rewind panel
+
+        //play back the recorded steps newest to oldest until Mario's history (3s) runs out
+        float stepsToPlay = 0f;
+        while (positionHistory.Count > 0)
+        {
+            stepsToPlay += rewindPlaybackSpeed; // fractional speeds carry over to the next step
+            while (stepsToPlay >= 1f && positionHistory.Count > 0)
+            {
+                stepsToPlay -= 1f;
+                RewindTo(PopHistory());
+                rewindStep.Invoke(); // every goomba steps back once too
+            }
+            yield return new WaitForFixedUpdate();
+        }
+
+        SetRewinding(false);
+        rewindEnd.Invoke(); // goombas resume patrolling, HUD hides the rewind panel
     }
 
     public void RequestPowerupEffect(IPowerup powerup)
