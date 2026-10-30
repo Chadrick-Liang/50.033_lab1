@@ -39,13 +39,22 @@ public class EnemyMovement : MonoBehaviour
     public AudioSource enemyAudio;
     public AudioClip stompClip;
 
-    // raised when Mario stomps this goomba, link to OnIncrementScore's Raise (Dynamic int) in the Inspector
+    // Raised whenever this goomba is defeated; linked to OnIncrementScore in the Inspector.
     public int stompScore = 1;
     public UnityEvent<int> stomped;
 
     private Collider2D enemyCollider;
+    private SpriteRenderer enemySprite;
+    private Color originalSpriteColor;
+    private Quaternion originalLocalRotation;
     private bool isDead = false;
     public bool IsDead => isDead;
+
+    [Min(0.01f)]
+    public float fireFlipDuration = 0.2f;
+
+    [Min(0.01f)]
+    public float fireFadeDuration = 0.4f;
 
     void Start()
     {
@@ -54,8 +63,11 @@ public class EnemyMovement : MonoBehaviour
         enemyPatrolTime = gameConstants.goombaPatrolTime;
         enemyBody = GetComponent<Rigidbody2D>();
         enemyCollider = GetComponent<Collider2D>();
+        enemySprite = GetComponent<SpriteRenderer>();
         if (enemyAnimator == null) enemyAnimator = GetComponent<Animator>();
         if (enemyAudio == null) enemyAudio = GetComponent<AudioSource>();
+        originalLocalRotation = transform.localRotation;
+        if (enemySprite != null) originalSpriteColor = enemySprite.color;
         //remember where goomba started
         startPosition = transform.localPosition;
         // get the starting position
@@ -150,6 +162,63 @@ public class EnemyMovement : MonoBehaviour
         StartCoroutine(DisappearAfterDeath());
     }
 
+    public void HitByFireball()
+    {
+        if (isDead) return;
+
+        isDead = true;
+        enemyCollider.enabled = false;
+        enemyBody.linearVelocity = Vector2.zero;
+        enemyBody.angularVelocity = 0f;
+        enemyBody.simulated = false;
+
+        if (enemyAnimator != null) enemyAnimator.enabled = false;
+        if (enemyAudio != null && stompClip != null) enemyAudio.PlayOneShot(stompClip);
+
+        // This UnityEvent raises the OnIncrementScore ScriptableObject event in the scene.
+        stomped.Invoke(stompScore);
+        StartCoroutine(FireDeathAnimation());
+    }
+
+    private IEnumerator FireDeathAnimation()
+    {
+        Quaternion startRotation = transform.localRotation;
+        Quaternion upsideDownRotation =
+            startRotation * Quaternion.Euler(0f, 0f, 180f);
+
+        float elapsed = 0f;
+        while (elapsed < fireFlipDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / fireFlipDuration);
+            transform.localRotation = Quaternion.Lerp(
+                startRotation,
+                upsideDownRotation,
+                progress);
+            yield return null;
+        }
+
+        transform.localRotation = upsideDownRotation;
+
+        if (enemySprite != null)
+        {
+            Color visibleColor = enemySprite.color;
+            elapsed = 0f;
+
+            while (elapsed < fireFadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / fireFadeDuration);
+                Color fadedColor = visibleColor;
+                fadedColor.a = Mathf.Lerp(visibleColor.a, 0f, progress);
+                enemySprite.color = fadedColor;
+                yield return null;
+            }
+        }
+
+        gameObject.SetActive(false);
+    }
+
     private IEnumerator DisappearAfterDeath()
     {
         yield return new WaitForSeconds(dieDuration);
@@ -174,6 +243,18 @@ public class EnemyMovement : MonoBehaviour
         isDead = false;
         isRewinding = false;
         gameObject.SetActive(true);
+        transform.localRotation = originalLocalRotation;
+
+        if (enemySprite != null)
+        {
+            enemySprite.color = originalSpriteColor;
+            enemySprite.enabled = true;
+        }
+
+        if (enemyAnimator != null) enemyAnimator.enabled = true;
+        enemyBody.simulated = true;
+        enemyBody.linearVelocity = Vector2.zero;
+        enemyBody.angularVelocity = 0f;
         enemyCollider.enabled = true;
         enemyAnimator.Play(idleState, 0, 0f);
 

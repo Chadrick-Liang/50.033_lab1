@@ -37,9 +37,8 @@ public class FireballController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (TryHitEnemy(collision.gameObject))
         {
-            Destroy(gameObject);
             return;
         }
 
@@ -87,5 +86,25 @@ public class FireballController : MonoBehaviour
                 fireballBody.linearVelocity.x,
                 bounceVelocity);
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        TryHitEnemy(other.gameObject);
+    }
+
+    private bool TryHitEnemy(GameObject hitObject)
+    {
+        EnemyMovement enemy =
+            hitObject.GetComponentInParent<EnemyMovement>();
+
+        if (enemy == null)
+        {
+            return false;
+        }
+
+        enemy.HitByFireball();
+        Destroy(gameObject);
+        return true;
     }
 }
