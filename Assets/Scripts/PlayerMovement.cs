@@ -12,7 +12,10 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     private float upSpeed;
     private bool onGroundState = true;
     private SpriteRenderer marioSprite;
+    //private boolean for player movement direction
     private bool faceRightState = true;
+    //public boolean for scriptable object fireattackaction to know which direction to fire
+    public BoolVariable marioFaceRight;
 
     // shared with GameManager, which refills it on new game / restart
     public IntVariable gameLives;
@@ -52,6 +55,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
 
     public AudioSource marioAudio;
     public AudioClip marioDeath;
+    public AudioClip marioPowerup;
     private float deathImpulse;
 
     public float stompBounce = 10; // upward speed Mario gets after squashing a goomba
@@ -81,6 +85,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         if (duckAudio == null) duckAudio = marioAudio;
 
         marioSprite = GetComponent<SpriteRenderer>();
+        updateMarioShouldFaceRight(faceRightState);
         // Set to be 30 FPS
         Application.targetFrameRate = 30;
         marioBody = GetComponent<Rigidbody2D>();
@@ -104,20 +109,30 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     {
         if (value == -1 && faceRightState)
         {
-            faceRightState = false;
-            marioSprite.flipX = true;
+            updateMarioShouldFaceRight(false);
+            marioSprite.flipX = !faceRightState;
+
             if (marioBody.linearVelocity.x > 0.05f)
+            {
                 marioAnimator.SetTrigger("onSkid");
-
+            }
         }
-
         else if (value == 1 && !faceRightState)
         {
-            faceRightState = true;
-            marioSprite.flipX = false;
+            updateMarioShouldFaceRight(true);
+            marioSprite.flipX = !faceRightState;
+
             if (marioBody.linearVelocity.x < -0.05f)
+            {
                 marioAnimator.SetTrigger("onSkid");
+            }
         }
+    }
+
+    private void updateMarioShouldFaceRight(bool value)
+    {
+        faceRightState = value;
+        marioFaceRight.SetValue(faceRightState);
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -261,6 +276,26 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
                 return;
             }
 
+            MarioStateController stateController =
+    GetComponent<MarioStateController>();
+
+            MarioState currentMarioState =
+                EnumExtension.ParseEnum<MarioState>(
+                    stateController.currentState.name);
+
+            if (currentMarioState ==
+                MarioState.InvincibleSmallMario)
+            {
+                return;
+            }
+
+            if (currentMarioState == MarioState.SuperMario ||
+                currentMarioState == MarioState.FireMario)
+            {
+                DamageMario();
+                return;
+            }
+
             if (UseLife()) //if there are lives left
             {
                 duckAudio.PlayOneShot(marioRewind);
@@ -340,7 +375,20 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     public void RequestPowerupEffect(IPowerup powerup)
     {
         if (alive && !isRewinding && !isGameOver)
+        {
             powerup.ApplyPowerup(this);
+
+            if (marioAudio != null && marioPowerup != null)
+            {
+                marioAudio.PlayOneShot(marioPowerup);
+            }
+        }
+    }
+
+    public void DamageMario()
+    {
+        GetComponent<MarioStateController>()
+            .SetPowerup(PowerupType.Damage);
     }
 
     public void BecomeSuperMario()
@@ -371,7 +419,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;
         // reset sprite direction
-        faceRightState = true;
+        updateMarioShouldFaceRight(true);
         marioSprite.flipX = false;
         positionHistory.Clear();
 
@@ -413,7 +461,7 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         marioBody.linearVelocity = Vector2.zero;
         marioBody.angularVelocity = 0;
 
-        marioAnimator.Play("mario-die", 0, 0f);
+        DamageMario();
         duckAudio.PlayOneShot(marioDeath);
     }
 

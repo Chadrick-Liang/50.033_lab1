@@ -49,12 +49,34 @@ public class MagicMushroomPowerup : BasePowerup
         rigidBody.AddForce(Vector2.right * 3f, ForceMode2D.Impulse);
     }
 
-    public override void ApplyPowerup(MonoBehaviour recipient)
+    public override void ApplyPowerup(
+    MonoBehaviour recipient)
     {
-        if (!spawned || consumed || !(recipient is PlayerMovement player)) return;
-        if (!player.alive || player.IsRewinding) return;
+        if (!spawned ||
+            consumed ||
+            !(recipient is PlayerMovement player))
+        {
+            return;
+        }
+
+        if (!player.alive || player.IsRewinding)
+        {
+            return;
+        }
+
         consumed = true;
-        player.BecomeSuperMario();
+
+        MarioStateController marioController;
+
+        bool foundController =
+            recipient.TryGetComponent<MarioStateController>(
+                out marioController);
+
+        if (foundController)
+        {
+            marioController.SetPowerup(
+                this.powerupType);
+        }
     }
 
     public override void DestroyPowerup()

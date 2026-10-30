@@ -9,6 +9,7 @@ TagManager:
   - Life
   - DeathZone
   - Manager
+  - Fireball
   layers:
   - Default
   - TransparentFX

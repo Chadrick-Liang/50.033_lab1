@@ -1288,6 +1288,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 293306701}
   m_CullTransparentMesh: 1
+--- !u!4 &466534798 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+  m_PrefabInstance: {fileID: 1781968406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &484099137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1302,11 +1307,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3026970272057148095, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.79
+      value: -12
       objectReference: {fileID: 0}
     - target: {fileID: 3026970272057148095, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.37
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3026970272057148095, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1377,6 +1382,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3026970272057148095, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
   m_PrefabInstance: {fileID: 484099137}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &484099139 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6629336893880257574, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
+  m_PrefabInstance: {fileID: 484099137}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015717731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64ed3eaa2051f04b8d5b082f90e23e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionBoxPowerupController
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,6 +1948,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 466534798}
   - {fileID: 2054318042}
   - {fileID: 884208593}
   - {fileID: 572152015}
@@ -2039,11 +2056,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &710073354 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 883958245111712940, guid: c464315c87154394ebc4bfda485f8a08, type: 3}
-  m_PrefabInstance: {fileID: 484099137}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &802728103
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,7 +2496,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932166542}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 320705314a543544b99173aa88fc2b2b, type: 3}
   m_Name: 
@@ -2697,9 +2709,9 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 710073354}
+      - m_Target: {fileID: 484099139}
         m_TargetAssemblyTypeName: QuestionBoxPowerupController, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: ResetBox
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3906,6 +3918,7 @@ GameObject:
   - component: {fileID: 1595828819}
   - component: {fileID: 1595828822}
   - component: {fileID: 1595828821}
+  - component: {fileID: 1595828823}
   m_Layer: 0
   m_Name: Mario
   m_TagString: Player
@@ -3926,6 +3939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
+  marioFaceRight: {fileID: 11400000, guid: 4087a29e2b79c5b4b812cd3af60d6c78, type: 2}
   gameLives: {fileID: 11400000, guid: a69116bcf1f947858472c1a78498ce32, type: 2}
   livesChange:
     m_PersistentCalls:
@@ -4006,6 +4020,7 @@ MonoBehaviour:
   marioAnimator: {fileID: 1595828818}
   marioAudio: {fileID: 1595828817}
   marioDeath: {fileID: 8300000, guid: 8f0559d4966711f45afc518bf1fb3c11, type: 3}
+  marioPowerup: {fileID: 8300000, guid: 26301d2e86e99420599e315297a825df, type: 3}
   stompBounce: 10
   stompTolerance: 0.25
   marioRewind: {fileID: 8300000, guid: c78eca3d8a09d97489f3e63a77680634, type: 3}
@@ -4357,6 +4372,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: eb6e9873-4557-47e0-8ffe-bd418f52410c
     m_ActionName: gameplay/point
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1595828820}
+        m_TargetAssemblyTypeName: ActionManager, Assembly-CSharp
+        m_MethodName: OnFireAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 81eb9a9d-b5b0-4dda-9dd1-eb72ff457142
+    m_ActionName: 'gameplay/fire[/Keyboard/z]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: SuperMarioBros
   m_DefaultActionMap: gameplay
@@ -4419,6 +4450,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  fire:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1595828823}
+        m_TargetAssemblyTypeName: MarioStateController, Assembly-CSharp
+        m_MethodName: Fire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1595828821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4475,6 +4521,40 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1595828823}
+        m_TargetAssemblyTypeName: MarioStateController, Assembly-CSharp
+        m_MethodName: GameRestart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1595828823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595828810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb636723ad81b743af0bd30a650dfca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MarioStateController
+  startState: {fileID: 11400000, guid: 8fee855136c18c6419cfaf77a9a4fc87, type: 2}
+  previousState: {fileID: 0}
+  currentState: {fileID: 0}
+  remainState: {fileID: 11400000, guid: 5b9ee62c832549e4082c38e31ae51ad4, type: 2}
+  transitionStateChanged: 0
+  stateTimeElapsed: 0
+  isActive: 1
+  currentPowerupType: -1
+  shouldBeNextState: -1
+  gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
 --- !u!1 &1643127861
 GameObject:
   m_ObjectHideFlags: 0
@@ -5261,6 +5341,87 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1001 &1781968406
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 633708881}
+    m_Modifications:
+    - target: {fileID: 1119379678925742143, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_Name
+      value: Question_box_fireflower
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3012155916392066604, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 2455c3b4d8e268642b8b786820c2e07a, type: 2}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PowerupGameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288841492992646811, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
+      propertyPath: powerupCollected.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 217de3b212ac73947aaf57d9d3010632, type: 3}
 --- !u!1 &1819987172
 GameObject:
   m_ObjectHideFlags: 0

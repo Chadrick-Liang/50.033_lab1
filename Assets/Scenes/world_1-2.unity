@@ -2294,6 +2294,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  fire:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &193718134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2570,6 +2573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
+  marioFaceRight: {fileID: 0}
   gameLives: {fileID: 11400000, guid: a69116bcf1f947858472c1a78498ce32, type: 2}
   livesChange:
     m_PersistentCalls:
@@ -2650,6 +2654,7 @@ MonoBehaviour:
   marioAnimator: {fileID: 193718136}
   marioAudio: {fileID: 193718135}
   marioDeath: {fileID: 8300000, guid: 8f0559d4966711f45afc518bf1fb3c11, type: 3}
+  marioPowerup: {fileID: 8300000, guid: 26301d2e86e99420599e315297a825df, type: 3}
   stompBounce: 10
   stompTolerance: 0.25
   marioRewind: {fileID: 8300000, guid: c78eca3d8a09d97489f3e63a77680634, type: 3}
