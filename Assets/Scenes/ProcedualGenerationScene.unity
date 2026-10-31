@@ -1458,63 +1458,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
   gameScore: {fileID: 11400000, guid: c68cd2d5329870d4b8daf6d00bae4e01, type: 2}
+  gameLives: {fileID: 0}
+  newGameOnStart: 1
   gameStart:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 589643967}
         m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
         m_MethodName: GameStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  gameRestart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1595828811}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: GameRestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1666320688}
-        m_TargetAssemblyTypeName: EnemyManager, Assembly-CSharp
-        m_MethodName: GameRestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 519420033}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: ResetCamera
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 589643967}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: GameRestart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1546,51 +1497,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
         m_MethodName: SetLives
         m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  gameOver:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 589643967}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: GameOver
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  rewindStart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 589643967}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: ShowRewindPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  rewindEnd:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 589643967}
-        m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
-        m_MethodName: HideRewindPanel
-        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3642,6 +3548,7 @@ GameObject:
   - component: {fileID: 1595828818}
   - component: {fileID: 1595828819}
   - component: {fileID: 1595828820}
+  - component: {fileID: 1595828821}
   m_Layer: 0
   m_Name: Mario
   m_TagString: Player
@@ -3662,11 +3569,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
-  jumpOverGoomba: {fileID: 1595828816}
+  marioFaceRight: {fileID: 0}
+  gameLives: {fileID: 0}
+  livesChange:
+    m_PersistentCalls:
+      m_Calls: []
   rewindDuration: 3
+  rewindStart:
+    m_PersistentCalls:
+      m_Calls: []
+  rewindStep:
+    m_PersistentCalls:
+      m_Calls: []
+  rewindEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  gameOver:
+    m_PersistentCalls:
+      m_Calls: []
   marioAnimator: {fileID: 1595828817}
   marioAudio: {fileID: 1595828818}
   marioDeath: {fileID: 8300000, guid: 8f0559d4966711f45afc518bf1fb3c11, type: 3}
+  marioPowerup: {fileID: 0}
   stompBounce: 10
   stompTolerance: 0.25
   marioRewind: {fileID: 8300000, guid: c78eca3d8a09d97489f3e63a77680634, type: 3}
@@ -3830,6 +3754,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e969d37967ebd64f9fa83c4c31e6f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpOverGoomba
+  incrementScore:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!95 &1595828817
 Animator:
   serializedVersion: 7
@@ -4104,6 +4031,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  fire:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1595828821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595828810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff900560c6d959040be0a30435e12e74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuffStateController
+  startState: {fileID: 11400000, guid: 1e2972e6fc70b1a48a5d31131ddcc687, type: 2}
+  previousState: {fileID: 0}
+  currentState: {fileID: 0}
+  remainState: {fileID: 11400000, guid: 5b9ee62c832549e4082c38e31ae51ad4, type: 2}
+  transitionStateChanged: 0
+  stateTimeElapsed: 0
+  isActive: 1
+  currentBuffType: -1
+  starInvincibleState: {fileID: 11400000, guid: d4f668ffac708e64ea87c05b4ce55429, type: 2}
+  gameConstants: {fileID: 11400000, guid: 38a73c92c5a54e441a6e36490fa95a70, type: 2}
 --- !u!4 &1628572189
 Transform:
   m_ObjectHideFlags: 0

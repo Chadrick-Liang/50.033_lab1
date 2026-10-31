@@ -267,6 +267,20 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
         {
             EnemyMovement enemyMovement = other.gameObject.GetComponent<EnemyMovement>();
 
+            BuffStateController buffController =
+                GetComponent<BuffStateController>();
+
+            if (buffController != null &&
+                buffController.IsStarInvincible)
+            {
+                if (enemyMovement != null)
+                {
+                    enemyMovement.HitByStar();
+                }
+
+                return;
+            }
+
             // landed on its head while falling: squash it and bounce off instead of getting hurt
             bool stomped = marioBody.linearVelocity.y < 0 && marioBody.position.y > other.bounds.max.y - stompTolerance;
             if (stomped && enemyMovement != null)
@@ -409,6 +423,14 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     // listens to OnGameRestart
     public void GameRestart()
     {
+        BuffStateController buffController =
+            GetComponent<BuffStateController>();
+
+        if (buffController != null)
+        {
+            buffController.GameRestart();
+        }
+
         isGameOver = false;
         IsSuperMario = false;
         transform.localScale = normalScale;
@@ -450,6 +472,15 @@ public class PlayerMovement : MonoBehaviour, IPowerupApplicable
     {
         if (!alive || isGameOver) return;
         marioAudio.Stop(); //prevent any leftover audio
+
+        BuffStateController buffController =
+            GetComponent<BuffStateController>();
+
+        if (buffController != null)
+        {
+            buffController.StopStarmanForDeath();
+        }
+
         var bgm = GameObject.Find("BGM");
         if (bgm == null) bgm = GameObject.Find("BackgroundCanvas");
         if (bgm != null) bgm.GetComponent<AudioSource>().Stop();

@@ -53,8 +53,14 @@ public class StarPowerup : BasePowerup
     {
         if (!spawned || consumed || !(recipient is PlayerMovement player)) return;
         if (!player.alive || player.IsRewinding) return;
+
+        BuffStateController buffController =
+            player.GetComponent<BuffStateController>();
+
+        if (buffController == null) return;
+
         consumed = true;
-        player.BecomeSuperMario();
+        buffController.SetBuff(PowerupType.StarMan);
     }
 
     public override void DestroyPowerup()

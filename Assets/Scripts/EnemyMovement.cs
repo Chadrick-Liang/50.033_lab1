@@ -164,6 +164,16 @@ public class EnemyMovement : MonoBehaviour
 
     public void HitByFireball()
     {
+        DefeatByAttack();
+    }
+
+    public void HitByStar()
+    {
+        DefeatByAttack();
+    }
+
+    private void DefeatByAttack()
+    {
         if (isDead) return;
 
         isDead = true;

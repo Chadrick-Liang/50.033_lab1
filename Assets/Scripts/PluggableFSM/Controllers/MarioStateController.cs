@@ -11,13 +11,26 @@ public class MarioStateController : StateController
         MarioState.Default;
 
     public GameConstants gameConstants;
+    public PlayerSessionState playerSessionState;
 
     private SpriteRenderer spriteRenderer;
 
     public override void Start()
     {
+        if (playerSessionState != null &&
+            playerSessionState.marioState != null)
+        {
+            currentState = playerSessionState.marioState;
+            stateTimeElapsed = playerSessionState.marioElapsed;
+        }
+        else
+        {
+            currentState = startState;
+            stateTimeElapsed = 0f;
+        }
+
+        currentPowerupType = PowerupType.Default;
         base.Start();
-        GameRestart();
     }
 
     public override void OnSetupState()
@@ -43,11 +56,37 @@ public class MarioStateController : StateController
                     Mathf.Abs(body.linearVelocity.x));
             }
         }
+
+        if (playerSessionState != null &&
+            currentState != null)
+        {
+            playerSessionState.marioState = currentState;
+            playerSessionState.marioElapsed = stateTimeElapsed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (playerSessionState == null ||
+            currentState == null)
+        {
+            return;
+        }
+
+        playerSessionState.marioState = currentState;
+        playerSessionState.marioElapsed = stateTimeElapsed;
     }
 
     public void GameRestart()
     {
         currentPowerupType = PowerupType.Default;
+
+        if (playerSessionState != null)
+        {
+            playerSessionState.marioState = startState;
+            playerSessionState.marioElapsed = 0f;
+        }
+
         TransitionToState(startState);
     }
 

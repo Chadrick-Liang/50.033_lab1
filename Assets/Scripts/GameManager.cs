@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour, IPowerupApplicable
     public GameConstants gameConstants;
     public IntVariable gameScore;
     public IntVariable gameLives;
+    public PlayerSessionState playerSessionState;
     // tick in the first level only, later levels keep the score and lives from the previous scene
     public bool newGameOnStart = true;
 
@@ -17,6 +18,14 @@ public class GameManager : MonoBehaviour, IPowerupApplicable
     public UnityEvent gameStart; // OnGameStart
     public UnityEvent<int> scoreChange; // OnUpdateScore (Dynamic int)
     public UnityEvent<int> livesChange; // OnUpdateLives (Dynamic int)
+
+    void Awake()
+    {
+        if (newGameOnStart && playerSessionState != null)
+        {
+            playerSessionState.ResetState();
+        }
+    }
 
     void Start()
     {
@@ -34,6 +43,11 @@ public class GameManager : MonoBehaviour, IPowerupApplicable
     // listens to OnGameRestart
     public void GameRestart()
     {
+        if (playerSessionState != null)
+        {
+            playerSessionState.ResetState();
+        }
+
         // reset score
         gameScore.Value = 0;
         SetScore(gameScore.Value);
